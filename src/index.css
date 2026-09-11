@@ -1,0 +1,48 @@
+/* 컬러 팔레트 디자인 시스템 - CSS 변수 (doc/포트폴리오/컬러 팔레트 디자인 시스템.md) */
+:root {
+  /* Primary Colors */
+  --color-primary: #e1251b;
+  --color-primary-light: #ff4b3e;
+  --color-primary-dark: #a81810;
+
+  /* Secondary Colors */
+  --color-secondary: #1b2a4a;
+  --color-accent: #f2e205;
+
+  /* Background Colors */
+  --color-bg-primary: #0e1830;
+  --color-bg-secondary: #2e4258;
+
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b8c4ce;
+  --color-text-muted: #8a96a3;
+
+  /* Interactive Colors */
+  --color-button-primary: #e1251b;
+  --color-button-hover: #ff4b3e;
+  --color-link: #f2e205;
+  --color-link-hover: #ffeb70;
+}
+
+/* CSS 초기화 */
+* {
+  box-sizing: border-box;
+}
+
+/* HTML, Body 초기화 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Root 앱 컨테이너 설정 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
