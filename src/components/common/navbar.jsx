@@ -22,13 +22,12 @@ function Navbar() {
       position="sticky"
       elevation={0}
       sx={{
-        backgroundColor: 'rgba(27, 42, 74, 0.72)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(184, 196, 206, 0.12)',
-        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
+        backgroundColor: 'background.default',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
       }}
     >
-      <Toolbar sx={{ justifyContent: 'center', px: { xs: 2, md: 3 } }}>
+      <Toolbar sx={{ justifyContent: 'center', px: { xs: 2, md: 6 }, py: 1 }}>
         <Box
           sx={{
             width: '100%',
@@ -38,24 +37,13 @@ function Navbar() {
             justifyContent: 'space-between',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box
-              sx={{
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                background:
-                  'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
-              }}
-            />
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 700, color: 'text.primary' }}
-            >
-              My Portfolio
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 } }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 800, letterSpacing: '-0.01em', color: 'text.primary' }}
+          >
+            My Portfolio
+          </Typography>
+          <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 } }}>
             {NAV_ITEMS.map((item) => (
               <Box
                 key={item.path}
@@ -64,22 +52,20 @@ function Navbar() {
                 end={item.path === '/'}
                 sx={{
                   textDecoration: 'none',
-                  fontSize: { xs: '0.8rem', md: '0.95rem' },
-                  fontWeight: 600,
-                  color: 'text.secondary',
-                  px: { xs: 1.5, md: 2.5 },
-                  py: 1,
-                  borderRadius: 999,
-                  transition: 'color 0.2s ease, background-color 0.2s ease',
+                  fontSize: { xs: '0.75rem', md: '0.85rem' },
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'text.disabled',
+                  py: 2,
+                  borderBottom: '2px solid transparent',
+                  transition: 'color 0.2s ease, border-color 0.2s ease',
                   '&.active': {
-                    color: 'background.default',
-                    backgroundColor: 'accent.main',
+                    color: 'text.primary',
+                    borderColor: 'accent.main',
                   },
                   '&:hover': {
-                    color: 'accent.main',
-                  },
-                  '&.active:hover': {
-                    color: 'background.default',
+                    color: 'text.primary',
                   },
                 }}
               >

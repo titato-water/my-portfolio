@@ -2,8 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
 import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import SectionHeading from '../ui/section-heading.jsx';
 
 /**
  * Skill Tree 섹션
@@ -16,31 +16,20 @@ function SkillTreeSection() {
       component="section"
       sx={{
         width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        backgroundColor: 'background.paper',
-        py: { xs: 6, md: 10 },
-        px: { xs: 2, md: 3 },
+        backgroundColor: 'background.default',
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        px: { xs: 2, md: 6 },
+        py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
-        <Avatar
-          sx={{
-            width: 64,
-            height: 64,
-            mx: 'auto',
-            mb: 2.5,
-            backgroundColor: 'rgba(242, 226, 5, 0.15)',
-            color: 'accent.main',
-          }}
-        >
-          <AccountTreeRoundedIcon fontSize="medium" />
-        </Avatar>
+      <Container maxWidth="lg" disableGutters>
+        <SectionHeading label="Skill Tree" index="03" total="05" />
         <Typography
-          variant="h4"
           sx={{
-            fontSize: { xs: '1.5rem', md: '2rem' },
+            fontSize: { xs: '1.75rem', md: '2.5rem' },
             fontWeight: 700,
+            letterSpacing: '-0.01em',
             color: 'text.primary',
             mb: 2,
           }}
@@ -52,9 +41,8 @@ function SkillTreeSection() {
             fontSize: { xs: '1rem', md: '1.1rem' },
             lineHeight: 1.7,
             color: 'text.secondary',
-            maxWidth: 520,
-            mx: 'auto',
-            mb: 3,
+            maxWidth: 560,
+            mb: 5,
           }}
         >
           여기는 Skill Tree 섹션입니다. 기술 스택을 트리나 프로그레스바로
@@ -62,15 +50,21 @@ function SkillTreeSection() {
         </Typography>
         <Box
           sx={{
-            border: '1.5px dashed rgba(242, 226, 5, 0.35)',
-            borderRadius: 3,
-            py: { xs: 3, md: 4 },
-            px: 2,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+            border: '1px dashed',
+            borderColor: 'divider',
+            borderRadius: 1,
+            py: { xs: 4, md: 5 },
+            px: 3,
             color: 'text.disabled',
-            fontSize: '0.9rem',
           }}
         >
-          시각화 영역 (Coming soon)
+          <AccountTreeRoundedIcon fontSize="small" />
+          <Typography sx={{ fontSize: '0.9rem' }}>
+            시각화 영역 (Coming soon)
+          </Typography>
         </Box>
       </Container>
     </Box>

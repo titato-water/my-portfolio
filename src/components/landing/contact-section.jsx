@@ -2,12 +2,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import ChatBubbleRoundedIcon from '@mui/icons-material/ChatBubbleRounded';
+import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
+import SectionHeading from '../ui/section-heading.jsx';
 
-const CONTACT_ICONS = [EmailRoundedIcon, GitHubIcon, ChatBubbleRoundedIcon];
+const CONTACT_ITEMS = [
+  { icon: EmailRoundedIcon, label: 'Email' },
+  { icon: GitHubIcon, label: 'GitHub' },
+  { icon: ChatBubbleOutlineRoundedIcon, label: 'Message' },
+];
 
 /**
  * Contact 섹션
@@ -20,19 +24,20 @@ function ContactSection() {
       component="section"
       sx={{
         width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        backgroundColor: 'secondary.main',
-        py: { xs: 6, md: 10 },
-        px: { xs: 2, md: 3 },
+        backgroundColor: 'background.default',
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        px: { xs: 2, md: 6 },
+        py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+      <Container maxWidth="lg" disableGutters>
+        <SectionHeading label="Contact" index="05" total="05" />
         <Typography
-          variant="h4"
           sx={{
-            fontSize: { xs: '1.5rem', md: '2rem' },
+            fontSize: { xs: '1.75rem', md: '2.5rem' },
             fontWeight: 700,
+            letterSpacing: '-0.01em',
             color: 'text.primary',
             mb: 2,
           }}
@@ -44,27 +49,31 @@ function ContactSection() {
             fontSize: { xs: '1rem', md: '1.1rem' },
             lineHeight: 1.7,
             color: 'text.secondary',
-            maxWidth: 520,
-            mx: 'auto',
-            mb: 3.5,
+            maxWidth: 560,
+            mb: 5,
           }}
         >
           여기는 Contact 섹션입니다. 연락처, SNS, 간단한 메시지 폼이 들어갈
           예정입니다.
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-          {CONTACT_ICONS.map((Icon, index) => (
-            <Avatar
-              key={index}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 3, md: 6 } }}>
+          {CONTACT_ITEMS.map(({ icon: Icon, label }) => (
+            <Box
+              key={label}
               sx={{
-                width: 48,
-                height: 48,
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                color: 'accent.main',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                color: 'text.secondary',
+                transition: 'color 0.2s ease',
+                '&:hover': { color: 'accent.main' },
               }}
             >
               <Icon fontSize="small" />
-            </Avatar>
+              <Typography sx={{ fontSize: '0.95rem', fontWeight: 600 }}>
+                {label}
+              </Typography>
+            </Box>
           ))}
         </Box>
       </Container>

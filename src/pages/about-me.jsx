@@ -2,8 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import SectionNumber from '../components/ui/section-number.jsx';
 
 /**
  * About Me 페이지
@@ -15,44 +14,41 @@ function AboutMe() {
     <Box
       component="main"
       sx={{
+        position: 'relative',
+        overflow: 'hidden',
         width: '100%',
         flexGrow: 1,
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'background.default',
-        py: { xs: 6, md: 10 },
+        px: { xs: 2, md: 6 },
+        py: { xs: 10, md: 16 },
       }}
     >
-      <Container maxWidth="md" sx={{ textAlign: 'center', px: { xs: 2, md: 3 } }}>
-        <Avatar
-          sx={{
-            width: 72,
-            height: 72,
-            mx: 'auto',
-            mb: 3,
-            background:
-              'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
-          }}
-        >
-          <PersonRoundedIcon fontSize="large" />
-        </Avatar>
+      <SectionNumber value="02" />
+      <Container maxWidth="lg" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
+        <Typography variant="overline" sx={{ color: 'accent.main' }}>
+          About Me
+        </Typography>
         <Typography
-          variant="h3"
+          component="h1"
           sx={{
-            fontSize: { xs: '2rem', md: '2.5rem' },
-            fontWeight: 700,
+            fontSize: { xs: '2.5rem', md: '4rem' },
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
             color: 'text.primary',
-            mb: 2,
+            mt: 1,
+            mb: 3,
           }}
         >
           About Me
         </Typography>
         <Typography
           sx={{
-            fontSize: { xs: '1rem', md: '1.2rem' },
+            fontSize: { xs: '1rem', md: '1.25rem' },
             lineHeight: 1.7,
             color: 'text.secondary',
+            maxWidth: 560,
           }}
         >
           About Me 페이지가 개발될 공간입니다. 상세한 자기소개가 들어갈
