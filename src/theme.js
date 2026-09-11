@@ -31,11 +31,34 @@ const theme = createTheme({
       disabled: '#8a96a3',
     },
   },
+  shape: {
+    borderRadius: 14,
+  },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: '2.125rem',
-      fontWeight: 500,
+      fontWeight: 700,
+      letterSpacing: '-0.02em',
+    },
+    h2: {
+      fontWeight: 700,
+      letterSpacing: '-0.02em',
+    },
+    h3: {
+      fontWeight: 700,
+      letterSpacing: '-0.01em',
+    },
+    h4: {
+      fontWeight: 700,
+      letterSpacing: '-0.01em',
+    },
+    h6: {
+      fontWeight: 700,
+    },
+    button: {
+      textTransform: 'none',
+      fontWeight: 600,
     },
   },
   spacing: 8,
@@ -47,6 +70,38 @@ const theme = createTheme({
           '&:hover': {
             color: '#ffeb70',
           },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 999,
+          paddingLeft: 24,
+          paddingRight: 24,
+          paddingTop: 10,
+          paddingBottom: 10,
+        },
+        containedPrimary: {
+          boxShadow: '0 8px 20px rgba(225, 37, 27, 0.35)',
+          '&:hover': {
+            boxShadow: '0 10px 26px rgba(255, 75, 62, 0.45)',
+          },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          border: '1px solid rgba(184, 196, 206, 0.12)',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
         },
       },
     },

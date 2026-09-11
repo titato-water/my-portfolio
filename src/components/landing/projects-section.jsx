@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 
 const PLACEHOLDER_PROJECTS = ['Project 1', 'Project 2', 'Project 3', 'Project 4'];
 
@@ -43,36 +44,58 @@ function ProjectsSection() {
         <Typography
           sx={{
             fontSize: { xs: '1rem', md: '1.1rem' },
-            lineHeight: 1.6,
+            lineHeight: 1.7,
             color: 'text.secondary',
+            maxWidth: 520,
+            mx: 'auto',
             mb: 4,
           }}
         >
           여기는 Projects 섹션입니다. 대표작 썸네일 3-4개와 '더 보기' 버튼이
           들어갈 예정입니다.
         </Typography>
-        <Grid container spacing={2} sx={{ mb: 4 }}>
+        <Grid container spacing={2.5} sx={{ mb: 4 }}>
           {PLACEHOLDER_PROJECTS.map((name) => (
             <Grid key={name} size={{ xs: 6, md: 3 }}>
               <Card
                 sx={{
                   backgroundColor: 'background.paper',
-                  borderRadius: 2,
+                  borderRadius: 3,
                   height: '100%',
+                  overflow: 'hidden',
+                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                  '&:hover': {
+                    transform: 'translateY(-6px)',
+                    boxShadow: '0 16px 32px rgba(0, 0, 0, 0.3)',
+                  },
                 }}
               >
+                <Box
+                  sx={{
+                    height: { xs: 64, md: 88 },
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background:
+                      'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-bg-primary) 100%)',
+                    color: 'rgba(242, 226, 5, 0.55)',
+                  }}
+                >
+                  <ImageRoundedIcon fontSize="medium" />
+                </Box>
                 <CardContent
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    minHeight: { xs: 80, md: 100 },
+                    py: 2,
                   }}
                 >
                   <Typography
                     sx={{
-                      fontSize: { xs: '0.9rem', md: '1rem' },
-                      color: 'text.disabled',
+                      fontSize: { xs: '0.85rem', md: '0.95rem' },
+                      fontWeight: 600,
+                      color: 'text.secondary',
                     }}
                   >
                     {name}
@@ -89,9 +112,12 @@ function ProjectsSection() {
           sx={{
             borderColor: 'accent.main',
             color: 'accent.main',
+            borderWidth: 1.5,
             '&:hover': {
+              borderWidth: 1.5,
               borderColor: 'accent.hover',
               color: 'accent.hover',
+              backgroundColor: 'rgba(242, 226, 5, 0.08)',
             },
           }}
         >

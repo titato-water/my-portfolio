@@ -2,6 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 
 /**
  * About Me 페이지
@@ -23,6 +25,18 @@ function AboutMe() {
       }}
     >
       <Container maxWidth="md" sx={{ textAlign: 'center', px: { xs: 2, md: 3 } }}>
+        <Avatar
+          sx={{
+            width: 72,
+            height: 72,
+            mx: 'auto',
+            mb: 3,
+            background:
+              'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
+          }}
+        >
+          <PersonRoundedIcon fontSize="large" />
+        </Avatar>
         <Typography
           variant="h3"
           sx={{
@@ -37,7 +51,7 @@ function AboutMe() {
         <Typography
           sx={{
             fontSize: { xs: '1rem', md: '1.2rem' },
-            lineHeight: 1.6,
+            lineHeight: 1.7,
             color: 'text.secondary',
           }}
         >
