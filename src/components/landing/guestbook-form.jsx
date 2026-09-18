@@ -128,7 +128,7 @@ function GuestbookForm({ onSubmitted }) {
         variant="standard"
         fullWidth
         multiline
-        minRows={3}
+        minRows={2}
         error={Boolean(fieldErrors.message)}
         helperText={fieldErrors.message}
       />
