@@ -4,21 +4,27 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import SectionHeading from '../ui/section-heading.jsx';
+import GuestbookForm from './guestbook-form.jsx';
+import GuestbookList from './guestbook-list.jsx';
 
 const CONTACT_ITEMS = [
-  { icon: EmailRoundedIcon, label: 'Email' },
-  { icon: GitHubIcon, label: 'GitHub' },
-  { icon: ChatBubbleOutlineRoundedIcon, label: 'Message' },
+  { icon: EmailRoundedIcon, label: 'hsb052890@gmail.com', href: 'mailto:hsb052890@gmail.com' },
+  { icon: GitHubIcon, label: 'github.com/titato-water', href: 'https://github.com/titato-water' },
 ];
 
 /**
  * Contact 섹션
  *
- * 연락처, SNS, 메시지 폼이 들어갈 자리를 안내하는 플레이스홀더 섹션.
+ * 연락처(이메일/GitHub) 영역과 방명록 작성/조회 영역으로 구성된 섹션.
  */
 function ContactSection() {
+  const [refreshKey, setRefreshKey] = React.useState(0);
+
+  const handleGuestbookSubmitted = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
+
   return (
     <Box
       component="section"
@@ -53,18 +59,24 @@ function ContactSection() {
             mb: 5,
           }}
         >
-          여기는 Contact 섹션입니다. 연락처, SNS, 간단한 메시지 폼이 들어갈
-          예정입니다.
+          궁금한 점이 있으시면 언제든 연락해주세요. 방명록에 간단한 메시지를
+          남겨주셔도 좋습니다.
         </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 3, md: 6 } }}>
-          {CONTACT_ITEMS.map(({ icon: Icon, label }) => (
+
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 3, md: 6 }, mb: { xs: 8, md: 10 } }}>
+          {CONTACT_ITEMS.map(({ icon: Icon, label, href }) => (
             <Box
               key={label}
+              component="a"
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: 1,
                 color: 'text.secondary',
+                textDecoration: 'none',
                 transition: 'color 0.2s ease',
                 '&:hover': { color: 'accent.main' },
               }}
@@ -75,6 +87,27 @@ function ContactSection() {
               </Typography>
             </Box>
           ))}
+        </Box>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gap: { xs: 6, md: 8 },
+          }}
+        >
+          <Box>
+            <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.05em', color: 'text.primary', mb: 3 }}>
+              방명록 남기기
+            </Typography>
+            <GuestbookForm onSubmitted={handleGuestbookSubmitted} />
+          </Box>
+          <Box>
+            <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.05em', color: 'text.primary', mb: 3 }}>
+              방명록
+            </Typography>
+            <GuestbookList refreshKey={refreshKey} />
+          </Box>
         </Box>
       </Container>
     </Box>

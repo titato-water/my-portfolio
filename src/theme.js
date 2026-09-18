@@ -18,19 +18,19 @@ const theme = createTheme({
       contrastText: '#ffffff',
     },
     accent: {
-      main: '#f2e205',
-      hover: '#ffeb70',
+      main: '#e1251b',
+      hover: '#ff4b3e',
     },
     background: {
-      default: '#0e1830',
-      paper: '#2e4258',
+      default: '#0a0a0a',
+      paper: '#1c1c1c',
     },
     text: {
       primary: '#ffffff',
-      secondary: '#b8c4ce',
-      disabled: '#8a96a3',
+      secondary: '#b3b3b3',
+      disabled: '#7a7a7a',
     },
-    divider: 'rgba(184, 196, 206, 0.16)',
+    divider: 'rgba(255, 255, 255, 0.16)',
   },
   shape: {
     borderRadius: 4,

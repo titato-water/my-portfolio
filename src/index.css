@@ -7,22 +7,22 @@
 
   /* Secondary Colors */
   --color-secondary: #1b2a4a;
-  --color-accent: #f2e205;
+  --color-accent: #e1251b;
 
   /* Background Colors */
-  --color-bg-primary: #0e1830;
-  --color-bg-secondary: #2e4258;
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #1c1c1c;
 
   /* Text Colors */
   --color-text-primary: #ffffff;
-  --color-text-secondary: #b8c4ce;
-  --color-text-muted: #8a96a3;
+  --color-text-secondary: #b3b3b3;
+  --color-text-muted: #7a7a7a;
 
   /* Interactive Colors */
   --color-button-primary: #e1251b;
   --color-button-hover: #ff4b3e;
-  --color-link: #f2e205;
-  --color-link-hover: #ffeb70;
+  --color-link: #e1251b;
+  --color-link-hover: #ff4b3e;
 }
 
 /* CSS 초기화 */
