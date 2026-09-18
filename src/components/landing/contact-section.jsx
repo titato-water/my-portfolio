@@ -9,8 +9,8 @@ import GuestbookForm from './guestbook-form.jsx';
 import GuestbookList from './guestbook-list.jsx';
 
 const CONTACT_ITEMS = [
-  { icon: EmailRoundedIcon, label: 'hsb052890@gmail.com', href: 'mailto:hsb052890@gmail.com' },
-  { icon: GitHubIcon, label: 'github.com/titato-water', href: 'https://github.com/titato-water' },
+  { icon: EmailRoundedIcon, label: 'hsb052890@gmail.com', type: 'copy', value: 'hsb052890@gmail.com' },
+  { icon: GitHubIcon, label: 'github.com/titato-water', type: 'link', href: 'https://github.com/titato-water' },
 ];
 
 /**
@@ -20,9 +20,20 @@ const CONTACT_ITEMS = [
  */
 function ContactSection() {
   const [refreshKey, setRefreshKey] = React.useState(0);
+  const [copiedValue, setCopiedValue] = React.useState('');
 
   const handleGuestbookSubmitted = () => {
     setRefreshKey((prev) => prev + 1);
+  };
+
+  const handleCopy = (value) => async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedValue(value);
+      setTimeout(() => setCopiedValue(''), 1500);
+    } catch {
+      // 클립보드 API를 사용할 수 없는 환경에서는 조용히 무시한다.
+    }
   };
 
   return (
@@ -64,29 +75,38 @@ function ContactSection() {
         </Typography>
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 3, md: 6 }, mb: { xs: 8, md: 10 } }}>
-          {CONTACT_ITEMS.map(({ icon: Icon, label, href }) => (
-            <Box
-              key={label}
-              component="a"
-              href={href}
-              target={href.startsWith('http') ? '_blank' : undefined}
-              rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                color: 'text.secondary',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                '&:hover': { color: 'accent.main' },
-              }}
-            >
-              <Icon fontSize="small" />
-              <Typography sx={{ fontSize: '0.95rem', fontWeight: 600 }}>
-                {label}
-              </Typography>
-            </Box>
-          ))}
+          {CONTACT_ITEMS.map((item) => {
+            const isCopied = item.type === 'copy' && copiedValue === item.value;
+            const itemProps = item.type === 'copy'
+              ? { component: 'button', type: 'button', onClick: handleCopy(item.value) }
+              : { component: 'a', href: item.href, target: '_blank', rel: 'noopener noreferrer' };
+
+            return (
+              <Box
+                key={item.label}
+                {...itemProps}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  color: isCopied ? 'accent.main' : 'text.secondary',
+                  textDecoration: 'none',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  p: 0,
+                  font: 'inherit',
+                  cursor: 'pointer',
+                  transition: 'color 0.2s ease',
+                  '&:hover': { color: 'accent.main' },
+                }}
+              >
+                <item.icon fontSize="small" />
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600 }}>
+                  {isCopied ? '복사됨!' : item.label}
+                </Typography>
+              </Box>
+            );
+          })}
         </Box>
 
         <Box
