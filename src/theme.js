@@ -15,15 +15,15 @@ const MODE_PALETTES = {
   },
   light: {
     background: {
-      default: '#ffffff',
-      paper: '#f5f5f5',
+      default: '#f0f0ee',
+      paper: '#e4e4e2',
     },
     text: {
-      primary: '#121212',
-      secondary: '#4d4d4d',
-      disabled: '#8a8a8a',
+      primary: '#1a1a1a',
+      secondary: '#54534f',
+      disabled: '#8a8985',
     },
-    divider: 'rgba(0, 0, 0, 0.12)',
+    divider: 'rgba(0, 0, 0, 0.14)',
   },
 };
 
