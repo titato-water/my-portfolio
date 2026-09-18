@@ -41,9 +41,13 @@ function GuestbookForm({ onSubmitted }) {
   const [form, setForm] = React.useState(INITIAL_FORM);
   const [status, setStatus] = React.useState('idle');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [fieldErrors, setFieldErrors] = React.useState({ name: '', message: '' });
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: '' }));
+    }
   };
 
   const handleEmojiSelect = (emoji) => () => {
@@ -52,7 +56,13 @@ function GuestbookForm({ onSubmitted }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!form.name.trim() || !form.message.trim()) {
+
+    const nextFieldErrors = {
+      name: form.name.trim() ? '' : '이름을 입력해주세요.',
+      message: form.message.trim() ? '' : '메시지를 입력해주세요.',
+    };
+    if (nextFieldErrors.name || nextFieldErrors.message) {
+      setFieldErrors(nextFieldErrors);
       return;
     }
 
@@ -83,8 +93,22 @@ function GuestbookForm({ onSubmitted }) {
   return (
     <Box
       component="form"
+      noValidate
       onSubmit={handleSubmit}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 480 }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 3,
+        maxWidth: 480,
+        '& .MuiFormHelperText-root.Mui-error': {
+          color: 'accent.main',
+          fontSize: '0.8rem',
+          mt: 0.5,
+        },
+        '& .MuiInput-underline.Mui-error:after': {
+          borderBottomColor: 'accent.main',
+        },
+      }}
     >
       <TextField
         label="이름"
@@ -93,6 +117,8 @@ function GuestbookForm({ onSubmitted }) {
         onChange={handleChange('name')}
         variant="standard"
         fullWidth
+        error={Boolean(fieldErrors.name)}
+        helperText={fieldErrors.name}
       />
       <TextField
         label="메시지"
@@ -103,6 +129,8 @@ function GuestbookForm({ onSubmitted }) {
         fullWidth
         multiline
         minRows={3}
+        error={Boolean(fieldErrors.message)}
+        helperText={fieldErrors.message}
       />
       <TextField
         label="이메일 (선택, 비공개)"
