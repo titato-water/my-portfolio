@@ -2,13 +2,14 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
 import SectionHeading from '../ui/section-heading.jsx';
+
+const SKILLS = ['HTML', 'CSS', 'JS', 'REACT', 'GIT', 'GITHUB', 'FIGMA'];
 
 /**
  * Skill Tree 섹션
  *
- * 기술 스택 시각화(트리 또는 프로그레스바)가 들어갈 자리를 안내하는 플레이스홀더 섹션.
+ * 보유 기술 스택을 태그 형태로 나열하는 섹션.
  */
 function SkillTreeSection() {
   return (
@@ -45,26 +46,37 @@ function SkillTreeSection() {
             mb: 5,
           }}
         >
-          여기는 Skill Tree 섹션입니다. 기술 스택을 트리나 프로그레스바로
-          시각화할 예정입니다.
+          사용할 수 있는 기술 스택입니다.
         </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1.5,
-            border: '1px dashed',
-            borderColor: 'divider',
-            borderRadius: 1,
-            py: { xs: 4, md: 5 },
-            px: 3,
-            color: 'text.disabled',
-          }}
-        >
-          <AccountTreeRoundedIcon fontSize="small" />
-          <Typography sx={{ fontSize: '0.9rem' }}>
-            시각화 영역 (Coming soon)
-          </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 1.5, md: 2 } }}>
+          {SKILLS.map((skill) => (
+            <Box
+              key={skill}
+              sx={{
+                border: '1px solid',
+                borderColor: 'divider',
+                borderRadius: 1,
+                px: { xs: 2.5, md: 3 },
+                py: { xs: 1.25, md: 1.5 },
+                transition: 'border-color 0.2s ease, color 0.2s ease',
+                color: 'text.primary',
+                '&:hover': {
+                  borderColor: 'accent.main',
+                  color: 'accent.main',
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: '0.85rem', md: '0.95rem' },
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {skill}
+              </Typography>
+            </Box>
+          ))}
         </Box>
       </Container>
     </Box>
