@@ -6,13 +6,13 @@ import { SiHtml5, SiCss, SiJavascript, SiReact, SiGit, SiGithub, SiFigma } from 
 import SectionHeading from '../ui/section-heading.jsx';
 
 const SKILLS = [
-  { label: 'HTML', Icon: SiHtml5 },
-  { label: 'CSS', Icon: SiCss },
-  { label: 'JS', Icon: SiJavascript },
-  { label: 'REACT', Icon: SiReact },
-  { label: 'GIT', Icon: SiGit },
-  { label: 'GITHUB', Icon: SiGithub },
-  { label: 'FIGMA', Icon: SiFigma },
+  { label: 'HTML', Icon: SiHtml5, color: '#E34F26' },
+  { label: 'CSS', Icon: SiCss, color: '#1572B6' },
+  { label: 'JS', Icon: SiJavascript, color: '#F7DF1E' },
+  { label: 'REACT', Icon: SiReact, color: '#61DAFB' },
+  { label: 'GIT', Icon: SiGit, color: '#F05032' },
+  { label: 'GITHUB', Icon: SiGithub, color: null },
+  { label: 'FIGMA', Icon: SiFigma, color: '#F24E1E' },
 ];
 
 /**
@@ -58,7 +58,7 @@ function SkillTreeSection() {
           사용할 수 있는 기술 스택입니다.
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 1.5, md: 2 } }}>
-          {SKILLS.map(({ label, Icon }) => (
+          {SKILLS.map(({ label, Icon, color }) => (
             <Box
               key={label}
               sx={{
@@ -78,7 +78,7 @@ function SkillTreeSection() {
                 },
               }}
             >
-              <Icon size={18} />
+              <Icon size={18} color={color ?? 'currentColor'} />
               <Typography
                 sx={{
                   fontSize: { xs: '0.85rem', md: '0.95rem' },
