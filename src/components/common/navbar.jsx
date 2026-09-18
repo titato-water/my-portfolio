@@ -43,12 +43,27 @@ function Navbar() {
             justifyContent: 'space-between',
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 800, letterSpacing: '-0.01em', color: 'text.primary' }}
-          >
-            My Portfolio
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: '2px',
+                backgroundColor: 'accent.main',
+              }}
+            />
+            <Typography
+              sx={{
+                fontSize: { xs: '0.95rem', md: '1.05rem' },
+                fontWeight: 800,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'text.primary',
+              }}
+            >
+              My Portfolio
+            </Typography>
+          </Box>
           <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 } }}>
             {NAV_ITEMS.map((item) => (
               <Box
