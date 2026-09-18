@@ -2,9 +2,18 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { SiHtml5, SiCss, SiJavascript, SiReact, SiGit, SiGithub, SiFigma } from 'react-icons/si';
 import SectionHeading from '../ui/section-heading.jsx';
 
-const SKILLS = ['HTML', 'CSS', 'JS', 'REACT', 'GIT', 'GITHUB', 'FIGMA'];
+const SKILLS = [
+  { label: 'HTML', Icon: SiHtml5 },
+  { label: 'CSS', Icon: SiCss },
+  { label: 'JS', Icon: SiJavascript },
+  { label: 'REACT', Icon: SiReact },
+  { label: 'GIT', Icon: SiGit },
+  { label: 'GITHUB', Icon: SiGithub },
+  { label: 'FIGMA', Icon: SiFigma },
+];
 
 /**
  * Skill Tree 섹션
@@ -49,10 +58,13 @@ function SkillTreeSection() {
           사용할 수 있는 기술 스택입니다.
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 1.5, md: 2 } }}>
-          {SKILLS.map((skill) => (
+          {SKILLS.map(({ label, Icon }) => (
             <Box
-              key={skill}
+              key={label}
               sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
                 border: '1px solid',
                 borderColor: 'divider',
                 borderRadius: 1,
@@ -66,6 +78,7 @@ function SkillTreeSection() {
                 },
               }}
             >
+              <Icon size={18} />
               <Typography
                 sx={{
                   fontSize: { xs: '0.85rem', md: '0.95rem' },
@@ -73,7 +86,7 @@ function SkillTreeSection() {
                   letterSpacing: '0.05em',
                 }}
               >
-                {skill}
+                {label}
               </Typography>
             </Box>
           ))}
