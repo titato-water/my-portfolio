@@ -118,7 +118,7 @@ function GuestbookForm({ onSubmitted }) {
         variant="standard"
         fullWidth
         error={Boolean(fieldErrors.name)}
-        helperText={fieldErrors.name}
+        helperText={fieldErrors.name || undefined}
       />
       <TextField
         label="메시지"
@@ -128,9 +128,9 @@ function GuestbookForm({ onSubmitted }) {
         variant="standard"
         fullWidth
         multiline
-        minRows={2}
+        minRows={1}
         error={Boolean(fieldErrors.message)}
-        helperText={fieldErrors.message}
+        helperText={fieldErrors.message || undefined}
       />
       <TextField
         label="이메일 (선택, 비공개)"

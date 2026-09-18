@@ -4,6 +4,10 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import { useColorMode } from '../../hooks/use-color-mode.js';
 
 const NAV_ITEMS = [
   { label: 'Home', path: '/' },
@@ -17,6 +21,8 @@ const NAV_ITEMS = [
  * 사이트 상단 네비게이션 바. Home / About Me / Projects 탭을 제공한다.
  */
 function Navbar() {
+  const { mode, toggleColorMode } = useColorMode();
+
   return (
     <AppBar
       position="sticky"
@@ -72,6 +78,20 @@ function Navbar() {
                 {item.label}
               </Box>
             ))}
+            <IconButton
+              onClick={toggleColorMode}
+              aria-label="라이트/다크 모드 전환"
+              sx={{
+                color: 'text.disabled',
+                '&:hover': { color: 'accent.main' },
+              }}
+            >
+              {mode === 'dark' ? (
+                <LightModeRoundedIcon fontSize="small" />
+              ) : (
+                <DarkModeRoundedIcon fontSize="small" />
+              )}
+            </IconButton>
           </Box>
         </Box>
       </Toolbar>
