@@ -22,8 +22,8 @@ const theme = createTheme({
       hover: '#ff4b3e',
     },
     background: {
-      default: '#0a0a0a',
-      paper: '#1c1c1c',
+      default: '#121212',
+      paper: '#1e1e1e',
     },
     text: {
       primary: '#ffffff',

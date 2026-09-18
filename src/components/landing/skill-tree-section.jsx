@@ -23,7 +23,7 @@ function SkillTreeSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="xl" disableGutters>
         <SectionHeading label="Skill Tree" index="03" total="05" />
         <Typography
           sx={{

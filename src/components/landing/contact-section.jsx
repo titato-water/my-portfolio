@@ -37,7 +37,7 @@ function ContactSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="xl" disableGutters>
         <SectionHeading label="Contact" index="05" total="05" />
         <Typography
           sx={{

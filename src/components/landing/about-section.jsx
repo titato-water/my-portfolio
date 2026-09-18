@@ -25,7 +25,7 @@ function AboutSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="xl" disableGutters>
         <SectionHeading label="About Me" index="02" total="05" />
         <Grid container spacing={{ xs: 4, md: 6 }}>
           <Grid

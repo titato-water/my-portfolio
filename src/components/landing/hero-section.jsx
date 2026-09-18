@@ -25,7 +25,7 @@ function HeroSection() {
       }}
     >
       <SectionNumber value="01" />
-      <Container maxWidth="lg" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth="xl" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
         <SectionHeading label="Hero" index="01" total="05" />
         <Box sx={{ maxWidth: 760 }}>
           <Typography

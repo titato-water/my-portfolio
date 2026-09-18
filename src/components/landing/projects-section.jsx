@@ -26,7 +26,7 @@ function ProjectsSection() {
         py: { xs: 8, md: 12 },
       }}
     >
-      <Container maxWidth="lg" disableGutters>
+      <Container maxWidth="xl" disableGutters>
         <SectionHeading label="Projects" index="04" total="05" />
         <Typography
           sx={{

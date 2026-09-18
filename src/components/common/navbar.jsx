@@ -31,7 +31,7 @@ function Navbar() {
         <Box
           sx={{
             width: '100%',
-            maxWidth: 'lg',
+            maxWidth: 'xl',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',

@@ -26,7 +26,7 @@ function AboutMe() {
       }}
     >
       <SectionNumber value="02" />
-      <Container maxWidth="lg" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
+      <Container maxWidth="xl" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
         <Typography variant="overline" sx={{ color: 'accent.main' }}>
           About Me
         </Typography>
