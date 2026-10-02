@@ -5,6 +5,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
@@ -16,9 +17,6 @@ import usePortfolio from '../../hooks/use-portfolio.js';
 import useProjects from '../../hooks/use-projects.js';
 import { GITHUB_URL } from '../../utils/contact-info.js';
 import { scrollToSection } from '../../utils/scroll-to-section.js';
-
-/** 헤드라인 전용 폰트 (Pretendard Variable) */
-const HEADLINE_FONT = '"Pretendard Variable", Pretendard, "Roboto", "Helvetica", "Arial", sans-serif';
 
 /** 헤드라인 줄 구성 (isAccent: 포인트 컬러로 강조할 단어) */
 const HEADLINE_LINES = [
@@ -40,6 +38,9 @@ const SECTION_SPACING = {
 
 /** 터치 대상의 최소 높이(px). 권장 최소값 44px 이상을 확보한다. */
 const TOUCH_TARGET_HEIGHT = 48;
+
+/** 대표 프로젝트 카드에서 썸네일 아래 정보 영역의 높이(px). 로딩 자리 표시와 맞춘다. */
+const CARD_INFO_HEIGHT = 184;
 
 /** 모션 줄이기 설정을 켠 사용자는 모든 애니메이션을 끈다. */
 const REDUCED_MOTION = '@media (prefers-reduced-motion: reduce)';
@@ -216,7 +217,6 @@ function HeroSection() {
               variant={isMobile ? 'h2' : 'h1'}
               component="h1"
               sx={{
-                fontFamily: HEADLINE_FONT,
                 fontSize: headlineSize,
                 fontWeight: 800,
                 lineHeight: isMobile ? 1.2 : 1.15,
@@ -349,7 +349,8 @@ function HeroSection() {
                 }}
               />
               <Typography sx={{ fontSize: isMobile ? '0.9rem' : '1rem' }}>
-                {isLoaded && `배포까지 마친 프로젝트 ${deployedProjects.length}개 · `}
+                {status !== 'error' &&
+                  `배포까지 마친 프로젝트 ${isLoaded ? deployedProjects.length : '-'}개 · `}
                 지금 새 기회에 열려 있어요
               </Typography>
             </Box>
@@ -381,10 +382,16 @@ function HeroSection() {
             <Grid
               size={isTwoColumn ? 5 : 12}
               sx={{
-                minHeight: isTwoColumn ? 280 : 0,
                 mt: isTwoColumn ? 0 : 6,
               }}
             >
+              {/* 데이터를 불러오는 동안 카드와 같은 크기의 자리 표시를 두어 로딩 후 레이아웃이 흔들리지 않게 한다. */}
+              {status === 'loading' && (
+                <Box sx={{ maxWidth: isTwoColumn ? 'none' : 560 }} aria-hidden="true">
+                  <Skeleton variant="rectangular" sx={{ width: '100%', height: 'auto', aspectRatio: '16 / 9' }} />
+                  <Skeleton variant="rectangular" height={CARD_INFO_HEIGHT} />
+                </Box>
+              )}
               {featuredProject && (
                 <Box
                   className="hero-fade"

@@ -64,7 +64,9 @@ function createAppTheme(mode) {
       borderRadius: 4,
     },
     typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      /* 사이트 전체를 Pretendard(한글·영문 모두 포함)로 통일한다. 로딩 전/실패 시에는 시스템 폰트로 대체된다. */
+      fontFamily:
+        '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif',
       h1: {
         fontWeight: 800,
         letterSpacing: '-0.02em',
@@ -84,6 +86,21 @@ function createAppTheme(mode) {
       },
     },
     spacing: 8,
+    /* 버튼 기본 스타일을 한 곳에서 관리한다: 그림자 없음, 터치 영역 44px 이상, 굵은 글씨와 넓은 자간 */
+    components: {
+      MuiButton: {
+        defaultProps: {
+          disableElevation: true,
+        },
+        styleOverrides: {
+          root: {
+            minHeight: 44,
+            fontWeight: 700,
+            letterSpacing: '0.05em',
+          },
+        },
+      },
+    },
   });
 }
 

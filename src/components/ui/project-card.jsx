@@ -22,9 +22,12 @@ import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupported
  * @param {string} githubUrl - GitHub 저장소 주소 [Optional]
  * @param {string} thumbnailUrl - 썸네일 이미지 주소 [Optional]
  * @param {boolean} isPersonal - 개인 프로젝트 여부 [Optional, 기본값: true]
+ * @param {string} role - 내 역할 (팀 프로젝트라면 담당 업무) [Optional, 기본값: '']
+ * @param {string} period - 진행 기간 [Optional, 기본값: '']
+ * @param {string[]} highlights - 주요 구현 내용(2~3개) [Optional, 기본값: []]
  *
  * Example usage:
- * <ProjectCard title="Devision" techStack={['React']} detailUrl="https://example.com" />
+ * <ProjectCard title="Devision" role="개인 프로젝트" highlights={['댓글 기능 구현']} detailUrl="https://example.com" />
  */
 function ProjectCard({
   title,
@@ -34,6 +37,9 @@ function ProjectCard({
   githubUrl,
   thumbnailUrl,
   isPersonal = true,
+  role = '',
+  period = '',
+  highlights = [],
 }) {
   const [isImageFailed, setIsImageFailed] = React.useState(false);
   const hasThumbnail = Boolean(thumbnailUrl) && !isImageFailed;
@@ -122,6 +128,41 @@ function ProjectCard({
               >
                 {description}
               </Typography>
+            )}
+            {(role || period) && (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 0.5, md: 2 }, rowGap: 0.5 }}>
+                {role && (
+                  <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'text.primary' }}>
+                    {role}
+                  </Typography>
+                )}
+                {period && (
+                  <Typography sx={{ fontSize: '0.9rem', color: 'text.secondary' }}>{period}</Typography>
+                )}
+              </Box>
+            )}
+            {highlights.length > 0 && (
+              <Box
+                component="ul"
+                aria-label={`${title} 주요 구현 내용`}
+                sx={{ m: 0, p: 0, pl: 2.5, display: 'flex', flexDirection: 'column', gap: 0.75 }}
+              >
+                {highlights.map((highlight) => (
+                  <Box
+                    key={highlight}
+                    component="li"
+                    sx={{
+                      fontSize: { xs: '0.95rem', md: '1rem' },
+                      lineHeight: 1.6,
+                      color: 'text.secondary',
+                      wordBreak: 'keep-all',
+                      '&::marker': { color: 'accent.main' },
+                    }}
+                  >
+                    {highlight}
+                  </Box>
+                ))}
+              </Box>
             )}
             {techStack.length > 0 && (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>

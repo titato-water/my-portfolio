@@ -73,6 +73,9 @@ function Projects() {
                 githubUrl={project.github_url}
                 thumbnailUrl={project.thumbnail_url}
                 isPersonal={project.is_personal}
+                role={project.role ?? ''}
+                period={project.period ?? ''}
+                highlights={project.highlights ?? []}
               />
             ))}
           </Box>
