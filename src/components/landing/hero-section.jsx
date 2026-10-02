@@ -5,43 +5,42 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import FeaturedProjectCard from '../ui/featured-project-card.jsx';
+import useCopyToClipboard from '../../hooks/use-copy-to-clipboard.js';
 import usePortfolio from '../../hooks/use-portfolio.js';
 import useProjects from '../../hooks/use-projects.js';
-
-const GITHUB_URL = 'https://github.com/titato-water';
+import { CONTACT_EMAIL, GITHUB_URL } from '../../utils/contact-info.js';
 
 /** 모션 줄이기 설정을 켠 사용자는 모든 애니메이션을 끈다. */
 const REDUCED_MOTION = '@media (prefers-reduced-motion: reduce)';
 
-/**
- * 연락하기 클릭 시 Contact 섹션(id="contact")으로 이동한다.
- * HashRouter를 쓰므로 #앵커 대신 scrollIntoView를 사용한다.
- */
-function scrollToContact() {
-  const target = document.getElementById('contact');
-  if (!target) return;
-
-  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: isReducedMotion ? 'auto' : 'smooth' });
-}
+/** 모바일에서 카드 대신 보여줄 프로젝트 이름 개수 */
+const MOBILE_PROJECT_NAME_COUNT = 3;
 
 /**
  * Hero 섹션
  *
- * 구성: 이름 · 직무 · 지역 오버라인 / 임팩트 헤드라인 / 근거 한 줄 서브카피 /
- * CTA(프로젝트 보기 + 연락하기 + GitHub) / 대표 프로젝트 카드(데스크탑) / DONE 카운터.
- * 이름과 직무는 PortfolioContext, 프로젝트와 완료 수는 Supabase 데이터에서 가져온다.
+ * 구성: 이름 · 직무 · 지역 오버라인 / 임팩트 헤드라인 / 서브카피 /
+ * CTA(프로젝트 보기 + 메일 복사 + GitHub) / DONE 카운터(배포까지 마친 프로젝트 수) /
+ * 대표 프로젝트 카드(데스크탑) · 프로젝트 이름 줄(모바일).
+ * 이름과 직무는 PortfolioContext, 프로젝트와 카운터는 Supabase 데이터에서 가져온다.
+ *
+ * - 카운터 기준: 배포 링크(detail_url)가 있는 게시 프로젝트만 센다.
+ * - 대표 프로젝트: 정렬 순서상 첫 번째 중 썸네일과 배포 링크가 모두 있는 프로젝트.
  */
 function HeroSection() {
   const { aboutMeData } = usePortfolio();
   const { projects, status } = useProjects();
+  const { isCopied, copy } = useCopyToClipboard();
   const { name, role } = aboutMeData.basicInfo;
   const isLoaded = status === 'loaded';
-  const featuredProject = isLoaded ? projects[0] : undefined;
+
+  const deployedProjects = projects.filter((project) => project.detail_url);
+  const featuredProject = deployedProjects.find((project) => project.thumbnail_url);
 
   return (
     <Box
@@ -81,7 +80,7 @@ function HeroSection() {
               className="hero-fade"
               component="h1"
               sx={{
-                fontSize: { xs: '2.5rem', md: '4rem', lg: '4.5rem' },
+                fontSize: 'clamp(2.5rem, 4.6vw, 4.5rem)',
                 fontWeight: 800,
                 lineHeight: 1.1,
                 letterSpacing: '-0.02em',
@@ -92,9 +91,9 @@ function HeroSection() {
               }}
             >
               <Box component="span" sx={{ display: { md: 'block' } }}>
-                디자인과 기능이 만나는{' '}
+                디자인과 기능이 어우러진{' '}
               </Box>
-              지점을 만듭니다.
+              화면을 만듭니다.
             </Typography>
             <Typography
               className="hero-fade"
@@ -108,8 +107,7 @@ function HeroSection() {
                 animationDelay: '0.16s',
               }}
             >
-              React로 직접 만들고 배포합니다. 소통하며 끝까지 마무리하는 신입
-              프론트엔드 개발자입니다.
+              React로 직접 만들고 배포합니다. 소통하며 끝까지 마무리합니다.
             </Typography>
             <Box
               className="hero-fade"
@@ -132,19 +130,21 @@ function HeroSection() {
                 프로젝트 보기
               </Button>
               <Button
-                onClick={scrollToContact}
+                onClick={() => copy(CONTACT_EMAIL)}
                 color="inherit"
                 size="large"
-                endIcon={<ArrowForwardRoundedIcon />}
-                sx={{ fontWeight: 600, color: 'text.primary' }}
+                startIcon={isCopied ? <CheckRoundedIcon /> : <ContentCopyRoundedIcon />}
+                aria-label={isCopied ? '메일 주소가 복사되었습니다' : '메일 주소 복사'}
+                sx={{ fontWeight: 600, color: isCopied ? 'accent.main' : 'text.primary' }}
               >
-                연락하기
+                {isCopied ? '복사했어요' : '메일 복사'}
               </Button>
               <Button
                 component="a"
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub (새 탭에서 열기)"
                 color="inherit"
                 size="large"
                 startIcon={<GitHubIcon />}
@@ -153,13 +153,61 @@ function HeroSection() {
                 GitHub
               </Button>
             </Box>
+            <Box
+              className="hero-fade"
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: 1.5,
+                mt: { xs: 4, md: 5 },
+                minHeight: 24,
+                color: 'text.secondary',
+                animationDelay: '0.32s',
+              }}
+            >
+              <Box
+                aria-hidden="true"
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  backgroundColor: 'accent.main',
+                  animation: 'hero-blink 2.4s ease-in-out infinite',
+                  [REDUCED_MOTION]: { animation: 'none' },
+                }}
+              />
+              <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>
+                {isLoaded && `배포까지 마친 프로젝트 ${deployedProjects.length}개 · `}
+                지금 새 기회에 열려 있어요
+              </Typography>
+            </Box>
+            {deployedProjects.length > 0 && (
+              <Typography
+                component={RouterLink}
+                to="/projects"
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                  mt: 2,
+                  fontSize: '0.9rem',
+                  color: 'text.secondary',
+                  textDecoration: 'none',
+                }}
+              >
+                {deployedProjects
+                  .slice(0, MOBILE_PROJECT_NAME_COUNT)
+                  .map((project) => project.title)
+                  .join(' · ')}{' '}
+                →
+              </Typography>
+            )}
           </Grid>
           <Grid
             size={{ xs: 12, md: 5 }}
             sx={{ display: { xs: 'none', md: 'block' }, minHeight: { md: 280 } }}
           >
             {featuredProject && (
-              <Box className="hero-fade" sx={{ animationDelay: '0.32s' }}>
+              <Box className="hero-fade" sx={{ animationDelay: '0.4s' }}>
                 <FeaturedProjectCard
                   title={featuredProject.title}
                   description={featuredProject.description}
@@ -172,41 +220,13 @@ function HeroSection() {
           </Grid>
         </Grid>
         <Box
-          className="hero-fade"
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: 1.5,
-            mt: { xs: 8, md: 12 },
-            minHeight: 24,
-            color: 'text.secondary',
-            animationDelay: '0.4s',
-          }}
-        >
-          <Box
-            aria-hidden="true"
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              backgroundColor: 'accent.main',
-              animation: 'hero-blink 2.4s ease-in-out infinite',
-              [REDUCED_MOTION]: { animation: 'none' },
-            }}
-          />
-          <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>
-            {isLoaded && `완료한 프로젝트 ${projects.length}개 · `}
-            지금 새 기회에 열려 있어요
-          </Typography>
-        </Box>
-        <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             gap: 1,
-            mt: { xs: 4, md: 6 },
+            mt: { xs: 6, md: 8 },
             color: 'text.secondary',
+            '@media (max-height: 800px)': { display: 'none' },
             '@keyframes bounce': {
               '0%, 100%': { transform: 'translateY(0)' },
               '50%': { transform: 'translateY(6px)' },

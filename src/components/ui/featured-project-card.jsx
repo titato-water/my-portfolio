@@ -6,10 +6,13 @@ import Typography from '@mui/material/Typography';
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 
+/** 카드에 표시할 기술 스택 칩의 최대 개수 */
+const MAX_TECH_CHIPS = 3;
+
 /**
  * FeaturedProjectCard 컴포넌트
  *
- * Hero에서 대표 프로젝트 하나를 미리 보여 주는 카드. 16:9 썸네일, 제목, 한 줄 설명, 기술 스택을 보여준다.
+ * Hero에서 대표 프로젝트 하나를 미리 보여 주는 카드. 16:9 썸네일, 제목, 한 줄 설명, 기술 스택(최대 3개)을 보여준다.
  * href가 있으면 새 탭으로 열리는 외부 링크, 없으면 내부 /projects 페이지로 이동한다.
  *
  * Props:
@@ -40,7 +43,7 @@ function FeaturedProjectCard({
   return (
     <Box
       {...linkProps}
-      aria-label={`${label}: ${title}`}
+      aria-label={href ? `${label}: ${title} (새 탭에서 열기)` : `${label}: ${title}`}
       sx={{
         display: 'block',
         color: 'inherit',
@@ -120,7 +123,7 @@ function FeaturedProjectCard({
         )}
         {techStack.length > 0 && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mt: 2 }}>
-            {techStack.map((tech) => (
+            {techStack.slice(0, MAX_TECH_CHIPS).map((tech) => (
               <Chip
                 key={tech}
                 label={tech}

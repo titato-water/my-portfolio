@@ -7,10 +7,11 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import SectionHeading from '../ui/section-heading.jsx';
 import GuestbookForm from './guestbook-form.jsx';
 import GuestbookList from './guestbook-list.jsx';
+import { CONTACT_EMAIL, GITHUB_URL } from '../../utils/contact-info.js';
 
 const CONTACT_ITEMS = [
-  { icon: EmailRoundedIcon, label: 'hsb052890@gmail.com', type: 'copy', value: 'hsb052890@gmail.com' },
-  { icon: GitHubIcon, label: 'github.com/titato-water', type: 'link', href: 'https://github.com/titato-water' },
+  { icon: EmailRoundedIcon, label: CONTACT_EMAIL, type: 'copy', value: CONTACT_EMAIL },
+  { icon: GitHubIcon, label: GITHUB_URL.replace('https://', ''), type: 'link', href: GITHUB_URL },
 ];
 
 /**
