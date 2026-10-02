@@ -71,11 +71,13 @@ function SkillTreeSection() {
                   color: 'text.primary',
                   '&:hover': {
                     borderColor: 'accent.main',
-                    color: 'accent.main',
+                    color: 'accent.text',
                   },
                 }}
               >
-                {SkillIcon && <SkillIcon size={18} color={iconInfo.color ?? 'currentColor'} />}
+                {SkillIcon && (
+                  <SkillIcon size={18} color={iconInfo.color ?? 'currentColor'} aria-hidden="true" />
+                )}
                 <Typography
                   sx={{
                     fontSize: { xs: '0.85rem', md: '0.95rem' },

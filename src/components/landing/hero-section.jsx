@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
@@ -14,6 +15,7 @@ import RevealText from '../ui/reveal-text.jsx';
 import usePortfolio from '../../hooks/use-portfolio.js';
 import useProjects from '../../hooks/use-projects.js';
 import { GITHUB_URL } from '../../utils/contact-info.js';
+import { scrollToSection } from '../../utils/scroll-to-section.js';
 
 /** 헤드라인 전용 폰트 (Pretendard Variable) */
 const HEADLINE_FONT = '"Pretendard Variable", Pretendard, "Roboto", "Helvetica", "Arial", sans-serif';
@@ -24,6 +26,21 @@ const HEADLINE_LINES = [
   [{ text: '화면을', isAccent: true }, { text: '만듭니다.' }],
 ];
 
+/** 반응형 기준: 모바일(~767px) / 한 열 레이아웃(~1023px) / 데스크톱(1200px~) */
+const MOBILE_QUERY = '(max-width:767px)';
+const TWO_COLUMN_QUERY = '(min-width:1024px)';
+const DESKTOP_QUERY = '(min-width:1200px)';
+
+/** 화면 크기별 여백 (theme.spacing 단위, 1 = 8px) */
+const SECTION_SPACING = {
+  mobile: { px: 2.5, pt: 8, pb: 13 },
+  tablet: { px: 4, pt: 10, pb: 14 },
+  desktop: { px: 6, pt: 12, pb: 16 },
+};
+
+/** 터치 대상의 최소 높이(px). 권장 최소값 44px 이상을 확보한다. */
+const TOUCH_TARGET_HEIGHT = 48;
+
 /** 모션 줄이기 설정을 켠 사용자는 모든 애니메이션을 끈다. */
 const REDUCED_MOTION = '@media (prefers-reduced-motion: reduce)';
 
@@ -33,17 +50,6 @@ const MOBILE_PROJECT_NAME_COUNT = 3;
 /** 헤드라인 타이핑이 끝나는 시점(초): 아래 요소들이 이후에 차례로 나타난다. */
 const HEADLINE_END_DELAY = 1.4;
 
-/**
- * 연락하기 클릭 시 Contact 섹션(id="contact")으로 이동한다.
- * HashRouter를 쓰므로 #앵커 대신 scrollIntoView를 사용한다.
- */
-function scrollToContact() {
-  const target = document.getElementById('contact');
-  if (!target) return;
-
-  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: isReducedMotion ? 'auto' : 'smooth' });
-}
 
 /**
  * Hero 섹션
@@ -51,16 +57,34 @@ function scrollToContact() {
  * - 배경: 포인트 컬러의 천천히 움직이는 광원 + 가장자리가 흐려지는 점 격자 (다크/라이트 대응)
  * - 타이포: Pretendard 헤드라인, 글자별 타이핑 등장, 포인트 단어 강조
  * - 애니메이션: 순차 페이드인, CTA 호버 효과, 클릭 가능한 스크롤 유도 화살표
- * - 구성: 이름·직무·지역 오버라인 / 헤드라인 / 서브카피 / CTA(프로젝트 보기·연락하기·GitHub) /
- *   카운터(배포까지 마친 프로젝트 수) / 대표 프로젝트 카드(데스크탑)·프로젝트 이름 줄(모바일)
  * - 모든 모션은 prefers-reduced-motion 설정을 존중한다.
+ *
+ * 반응형 (useMediaQuery로 레이아웃을 바꾸고, 세부 스타일은 sx로 지정):
+ * - 모바일(~767px): 한 열, 헤드라인 h2 크기, 버튼 세로 전체 너비, 대표 카드 대신 프로젝트 이름 줄
+ * - 태블릿(768~1199px): 1023px까지 한 열(카드는 아래에 표시), 이후 두 열. 여백은 중간 값
+ * - 데스크톱(1200px~): 두 열, 여유로운 여백, h1 크기 헤드라인
+ * - 모든 버튼/링크는 높이 44px 이상(48px)으로 터치하기 쉽게 만든다.
  */
 function HeroSection() {
   const { aboutMeData } = usePortfolio();
   const { projects, status } = useProjects();
   const heroRef = React.useRef(null);
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const isTwoColumn = useMediaQuery(TWO_COLUMN_QUERY);
+  const isDesktop = useMediaQuery(DESKTOP_QUERY);
   const { name, role } = aboutMeData.basicInfo;
   const isLoaded = status === 'loaded';
+
+  const spacing = isMobile
+    ? SECTION_SPACING.mobile
+    : isDesktop
+      ? SECTION_SPACING.desktop
+      : SECTION_SPACING.tablet;
+  const headlineSize = isMobile
+    ? 'clamp(2.125rem, 9.5vw, 3rem)'
+    : isTwoColumn
+      ? 'clamp(2.5rem, 4.6vw, 4.5rem)'
+      : '4rem';
 
   const deployedProjects = projects.filter((project) => project.detail_url);
   const featuredProject = deployedProjects.find((project) => project.thumbnail_url);
@@ -75,6 +99,19 @@ function HeroSection() {
 
   /** 헤드라인 이후 요소의 등장 지연 */
   const fadeDelay = (order) => `${HEADLINE_END_DELAY + order * 0.12}s`;
+
+  /** 모든 CTA 버튼이 공유하는 터치 친화 스타일 */
+  const touchButtonSx = {
+    minHeight: TOUCH_TARGET_HEIGHT,
+    fontWeight: 600,
+    color: 'text.primary',
+    transition: 'transform 0.2s ease, color 0.2s ease, background-color 0.2s ease',
+    '&:hover': {
+      color: 'accent.text',
+      backgroundColor: 'action.hover',
+      transform: 'translateY(-2px)',
+    },
+  };
 
   return (
     <Box
@@ -91,15 +128,16 @@ function HeroSection() {
           position: 'relative',
           overflow: 'hidden',
           width: '100%',
-          minHeight: { md: 'calc(100vh - 70px)' },
+          /* 헤더 높이(모바일 61px, 그 이상 약 70px)를 뺀 화면 높이를 채운다. */
+          minHeight: isMobile ? 'calc(100svh - 61px)' : 'calc(100svh - 70px)',
           display: 'flex',
           alignItems: 'center',
           backgroundColor: 'background.default',
           /* 왼쪽 아래 모서리의 은은한 광원 (오른쪽 위 광원과 대각선으로 균형을 맞춘다) */
           backgroundImage: `radial-gradient(ellipse 55% 65% at 0% 100%, ${cornerGlow}, transparent 70%)`,
-          px: { xs: 2, md: 6 },
-          pt: { xs: 10, md: 12 },
-          pb: { xs: 12, md: 16 },
+          px: spacing.px,
+          pt: spacing.pt,
+          pb: spacing.pb,
           '@keyframes hero-fade-up': {
             from: { opacity: 0, transform: 'translateY(12px)' },
             to: { opacity: 1, transform: 'translateY(0)' },
@@ -136,10 +174,10 @@ function HeroSection() {
           '&::after': {
             content: '""',
             position: 'absolute',
-            top: { xs: -100, md: -160 },
-            right: { xs: -160, md: -100 },
-            width: { xs: 420, md: 780 },
-            height: { xs: 420, md: 780 },
+            top: isMobile ? -100 : -160,
+            right: isMobile ? -160 : -100,
+            width: isMobile ? 420 : 780,
+            height: isMobile ? 420 : 780,
             borderRadius: '50%',
             pointerEvents: 'none',
             background: `radial-gradient(circle, ${glowColor}, transparent 65%)`,
@@ -150,46 +188,60 @@ function HeroSection() {
       }}
     >
       <Container maxWidth="xl" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
-        <Grid container spacing={{ xs: 0, md: 8 }} sx={{ alignItems: 'center' }}>
-          <Grid size={{ xs: 12, md: 7 }}>
+        <Grid
+          container
+          spacing={isTwoColumn ? (isDesktop ? 10 : 6) : 0}
+          sx={{ alignItems: 'center' }}
+        >
+          <Grid size={isTwoColumn ? 7 : 12}>
             <Typography
               className="hero-fade"
               variant="overline"
+              component="p"
               sx={{
-                display: 'block',
-                color: 'accent.main',
-                fontSize: { xs: '0.75rem', md: '0.85rem' },
+                color: 'accent.text',
+                fontSize: isMobile ? '0.75rem' : '0.85rem',
                 fontWeight: 700,
-                letterSpacing: '0.2em',
-                mb: { xs: 2, md: 3 },
+                letterSpacing: isMobile ? '0.14em' : '0.2em',
+                mb: isMobile ? 2 : 3,
               }}
             >
-              {name} · {role}
+              <Box component="span" sx={{ display: isMobile ? 'block' : 'inline' }}>
+                {name}
+              </Box>
+              {!isMobile && ' · '}
+              <Box component="span">{role}</Box>
             </Typography>
             <Typography
+              variant={isMobile ? 'h2' : 'h1'}
               component="h1"
               sx={{
                 fontFamily: HEADLINE_FONT,
-                fontSize: 'clamp(2.5rem, 4.6vw, 4.5rem)',
+                fontSize: headlineSize,
                 fontWeight: 800,
-                lineHeight: 1.15,
+                lineHeight: isMobile ? 1.2 : 1.15,
                 letterSpacing: '-0.03em',
                 color: 'text.primary',
-                mb: { xs: 3, md: 4 },
+                mb: isMobile ? 2.5 : 4,
                 wordBreak: 'keep-all',
               }}
             >
-              <RevealText lines={HEADLINE_LINES} startDelay={0.25} charDelay={0.045} />
+              <RevealText
+                lines={HEADLINE_LINES}
+                startDelay={0.25}
+                charDelay={0.045}
+                hasLineBreaks={!isMobile}
+              />
             </Typography>
             <Typography
               className="hero-fade"
               sx={{
-                fontSize: { xs: '1.05rem', md: '1.3rem' },
+                fontSize: isMobile ? '1.05rem' : isDesktop ? '1.3rem' : '1.2rem',
                 fontWeight: 400,
                 lineHeight: 1.7,
                 color: 'text.secondary',
                 maxWidth: 680,
-                mb: { xs: 4, md: 5 },
+                mb: isMobile ? 4 : 5,
                 wordBreak: 'keep-all',
                 animationDelay: fadeDelay(0),
               }}
@@ -198,13 +250,23 @@ function HeroSection() {
             </Typography>
             <Box
               className="hero-fade"
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                gap: { xs: 1, md: 2 },
-                animationDelay: fadeDelay(1),
-              }}
+              sx={
+                isMobile
+                  ? {
+                      /* 모바일: 주 버튼은 전체 너비, 보조 버튼 둘은 같은 너비로 나란히 */
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: 1.5,
+                      animationDelay: fadeDelay(1),
+                    }
+                  : {
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      gap: 2,
+                      animationDelay: fadeDelay(1),
+                    }
+              }
             >
               <Button
                 component={RouterLink}
@@ -214,7 +276,9 @@ function HeroSection() {
                 size="large"
                 sx={{
                   px: 4,
+                  minHeight: isMobile ? 52 : TOUCH_TARGET_HEIGHT,
                   fontWeight: 700,
+                  gridColumn: isMobile ? '1 / -1' : 'auto',
                   transition: 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease',
                   '&:hover': {
                     transform: 'translateY(-3px)',
@@ -226,21 +290,18 @@ function HeroSection() {
                 프로젝트 보기
               </Button>
               <Button
-                onClick={scrollToContact}
+                onClick={() => scrollToSection('contact')}
                 color="inherit"
                 size="large"
                 endIcon={<ArrowForwardRoundedIcon />}
                 sx={{
-                  fontWeight: 600,
-                  color: 'text.primary',
-                  transition: 'transform 0.2s ease, color 0.2s ease',
+                  ...touchButtonSx,
+                  backgroundColor: isMobile ? 'action.hover' : 'transparent',
+                  '& .MuiButton-endIcon': { transition: 'transform 0.2s ease' },
                   '&:hover': {
-                    color: 'accent.main',
-                    backgroundColor: 'transparent',
-                    transform: 'translateY(-2px)',
+                    ...touchButtonSx['&:hover'],
                     '& .MuiButton-endIcon': { transform: 'translateX(4px)' },
                   },
-                  '& .MuiButton-endIcon': { transition: 'transform 0.2s ease' },
                 }}
               >
                 연락하기
@@ -255,14 +316,8 @@ function HeroSection() {
                 size="large"
                 startIcon={<GitHubIcon />}
                 sx={{
-                  fontWeight: 600,
-                  color: 'text.primary',
-                  transition: 'transform 0.2s ease, color 0.2s ease',
-                  '&:hover': {
-                    color: 'accent.main',
-                    backgroundColor: 'transparent',
-                    transform: 'translateY(-2px)',
-                  },
+                  ...touchButtonSx,
+                  backgroundColor: isMobile ? 'action.hover' : 'transparent',
                 }}
               >
                 GitHub
@@ -275,7 +330,7 @@ function HeroSection() {
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 gap: 1.5,
-                mt: { xs: 4, md: 5 },
+                mt: isMobile ? 4 : 5,
                 minHeight: 24,
                 color: 'text.secondary',
                 animationDelay: fadeDelay(2),
@@ -293,19 +348,21 @@ function HeroSection() {
                   [REDUCED_MOTION]: { animation: 'none' },
                 }}
               />
-              <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>
+              <Typography sx={{ fontSize: isMobile ? '0.9rem' : '1rem' }}>
                 {isLoaded && `배포까지 마친 프로젝트 ${deployedProjects.length}개 · `}
                 지금 새 기회에 열려 있어요
               </Typography>
             </Box>
-            {deployedProjects.length > 0 && (
+            {isMobile && deployedProjects.length > 0 && (
               <Typography
                 className="hero-fade"
                 component={RouterLink}
                 to="/projects"
                 sx={{
-                  display: { xs: 'block', md: 'none' },
-                  mt: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  minHeight: 44,
+                  mt: 1,
                   fontSize: '0.9rem',
                   color: 'text.secondary',
                   textDecoration: 'none',
@@ -315,46 +372,58 @@ function HeroSection() {
                 {deployedProjects
                   .slice(0, MOBILE_PROJECT_NAME_COUNT)
                   .map((project) => project.title)
-                  .join(' · ')}{' '}
-                →
+                  .join(' · ')}
+                &nbsp;→
               </Typography>
             )}
           </Grid>
-          <Grid
-            size={{ xs: 12, md: 5 }}
-            sx={{ display: { xs: 'none', md: 'block' }, minHeight: { md: 280 } }}
-          >
-            {featuredProject && (
-              <Box className="hero-fade" sx={{ animationDelay: fadeDelay(2) }}>
-                <FeaturedProjectCard
-                  title={featuredProject.title}
-                  description={featuredProject.description}
-                  techStack={featuredProject.tech_stack}
-                  thumbnailUrl={featuredProject.thumbnail_url}
-                  href={featuredProject.detail_url}
-                />
-              </Box>
-            )}
-          </Grid>
+          {!isMobile && (
+            <Grid
+              size={isTwoColumn ? 5 : 12}
+              sx={{
+                minHeight: isTwoColumn ? 280 : 0,
+                mt: isTwoColumn ? 0 : 6,
+              }}
+            >
+              {featuredProject && (
+                <Box
+                  className="hero-fade"
+                  sx={{
+                    maxWidth: isTwoColumn ? 'none' : 560,
+                    animationDelay: fadeDelay(2),
+                  }}
+                >
+                  <FeaturedProjectCard
+                    title={featuredProject.title}
+                    description={featuredProject.description}
+                    techStack={featuredProject.tech_stack}
+                    thumbnailUrl={featuredProject.thumbnail_url}
+                    href={featuredProject.detail_url}
+                  />
+                </Box>
+              )}
+            </Grid>
+          )}
         </Grid>
       </Container>
       <ButtonBase
         className="hero-fade"
         onClick={handleScrollDown}
-        aria-label="아래로 스크롤"
+        aria-label="Scroll, 다음 섹션으로 이동"
         sx={{
           position: 'absolute',
           left: '50%',
-          bottom: { xs: 20, md: 28 },
-          ml: '-30px',
-          width: 60,
+          bottom: isMobile ? 16 : 28,
+          ml: '-32px',
+          width: 64,
+          minHeight: 44,
           flexDirection: 'column',
           gap: 0.5,
           color: 'text.secondary',
           borderRadius: 1,
           animationDelay: fadeDelay(4),
           transition: 'color 0.2s ease',
-          '&:hover': { color: 'accent.main' },
+          '&:hover': { color: 'accent.text' },
         }}
       >
         <Typography variant="overline" sx={{ lineHeight: 1.4, letterSpacing: '0.2em' }}>

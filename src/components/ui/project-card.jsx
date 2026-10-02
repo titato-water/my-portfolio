@@ -96,7 +96,7 @@ function ProjectCard({
             <Box>
               <Typography
                 variant="overline"
-                sx={{ color: 'accent.main', lineHeight: 1.6 }}
+                sx={{ color: 'accent.text', lineHeight: 1.6 }}
               >
                 {isPersonal ? 'Personal' : 'Team'}
               </Typography>
@@ -140,6 +140,7 @@ function ProjectCard({
                   rel="noopener noreferrer"
                   endIcon={<OpenInNewRoundedIcon />}
                   sx={{
+                    minHeight: 44,
                     transition: 'transform 0.15s ease',
                     '&:active': { transform: 'scale(0.96)' },
                   }}
@@ -156,6 +157,7 @@ function ProjectCard({
                   rel="noopener noreferrer"
                   startIcon={<GitHubIcon />}
                   sx={{
+                    minHeight: 44,
                     transition: 'transform 0.15s ease',
                     '&:active': { transform: 'scale(0.96)' },
                   }}

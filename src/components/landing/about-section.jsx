@@ -49,7 +49,7 @@ function AboutSection() {
                   width: { xs: 88, md: 120 },
                   height: { xs: 88, md: 120 },
                   backgroundColor: 'background.paper',
-                  color: 'accent.main',
+                  color: 'accent.text',
                   border: '2px solid',
                   borderColor: 'accent.main',
                 }}
@@ -69,7 +69,7 @@ function AboutSection() {
                 </Typography>
                 {basicInfo.role && (
                   <Typography
-                    sx={{ mt: 0.5, fontSize: '0.95rem', fontWeight: 600, color: 'accent.main' }}
+                    sx={{ mt: 0.5, fontSize: '0.95rem', fontWeight: 600, color: 'accent.text' }}
                   >
                     {basicInfo.role}
                   </Typography>

@@ -101,7 +101,7 @@ function GuestbookForm({ onSubmitted }) {
         gap: 3,
         maxWidth: 480,
         '& .MuiFormHelperText-root.Mui-error': {
-          color: 'accent.main',
+          color: 'accent.text',
           fontSize: '0.8rem',
           mt: 0.5,
         },
@@ -189,8 +189,8 @@ function GuestbookForm({ onSubmitted }) {
               type="button"
               onClick={handleEmojiSelect(emoji)}
               sx={{
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
                 fontSize: '1.1rem',
                 lineHeight: 1,
                 border: '1px solid',
@@ -214,13 +214,14 @@ function GuestbookForm({ onSubmitted }) {
         sx={{
           alignSelf: 'flex-start',
           mt: 1,
+          minHeight: 44,
           borderColor: 'text.primary',
           color: 'text.primary',
           fontWeight: 700,
           letterSpacing: '0.05em',
           '&:hover': {
             borderColor: 'accent.main',
-            color: 'accent.main',
+            color: 'accent.text',
             backgroundColor: 'transparent',
           },
         }}
@@ -228,12 +229,12 @@ function GuestbookForm({ onSubmitted }) {
         {status === 'submitting' ? '등록 중...' : 'SUBMIT'}
       </Button>
       {status === 'success' && (
-        <Typography sx={{ fontSize: '0.85rem', color: 'accent.main' }}>
+        <Typography sx={{ fontSize: '0.85rem', color: 'accent.text' }}>
           방명록이 등록되었습니다. 감사합니다!
         </Typography>
       )}
       {status === 'error' && (
-        <Typography sx={{ fontSize: '0.85rem', color: 'accent.main' }}>
+        <Typography sx={{ fontSize: '0.85rem', color: 'accent.text' }}>
           {errorMessage}
         </Typography>
       )}

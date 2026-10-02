@@ -57,7 +57,7 @@ function ProfileCard({
               width: { xs: 96, md: 160 },
               height: { xs: 96, md: 160 },
               backgroundColor: 'background.default',
-              color: 'accent.main',
+              color: 'accent.text',
               border: '2px solid',
               borderColor: 'accent.main',
             }}
@@ -85,7 +85,7 @@ function ProfileCard({
                 fontSize: { xs: '0.95rem', md: '1.15rem' },
                 fontWeight: 600,
                 letterSpacing: '0.04em',
-                color: 'accent.main',
+                color: 'accent.text',
                 mb: { xs: 2, md: 3 },
               }}
             >
@@ -95,7 +95,7 @@ function ProfileCard({
           <Grid container spacing={{ xs: 2, md: 3 }}>
             {infoItems.map((item) => (
               <Grid key={item.label} size={{ xs: 12, sm: 6, md: item.label === '학력' ? 6 : 3 }}>
-                <Typography variant="overline" sx={{ color: 'accent.main', lineHeight: 1.6 }}>
+                <Typography variant="overline" sx={{ color: 'accent.text', lineHeight: 1.6 }}>
                   {item.label}
                 </Typography>
                 <Typography

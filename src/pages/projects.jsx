@@ -30,7 +30,7 @@ function Projects() {
       }}
     >
       <Container maxWidth="xl" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
-        <Typography variant="overline" sx={{ color: 'accent.main' }}>
+        <Typography variant="overline" sx={{ color: 'accent.text' }}>
           Projects
         </Typography>
         <Typography

@@ -138,7 +138,7 @@ function ProjectsSection() {
               <ArrowOutwardRoundedIcon
                 className="project-arrow"
                 sx={{
-                  color: 'accent.main',
+                  color: 'accent.text',
                   opacity: 0,
                   transform: 'translate(-4px, 4px)',
                   transition: 'opacity 0.2s ease, transform 0.2s ease',

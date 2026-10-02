@@ -7,25 +7,26 @@ import Box from '@mui/material/Box';
  * 글자가 한 글자씩 나타나는 타이핑 느낌의 텍스트.
  * - CSS 애니메이션 지연(animation-delay)만 사용하므로 JS 타이머가 없고, 글자 자리를 미리 차지해 레이아웃이 흔들리지 않는다.
  * - 단어 단위로 묶어(nowrap) 한글 줄바꿈이 단어 중간에서 끊기지 않는다.
- * - 스크린 리더에는 전체 문장이 한 번에 읽히고(aria-label), 모션 줄이기 설정에서는 애니메이션 없이 바로 보인다.
+ * - 스크린 리더에는 전체 문장이 한 번에 읽히고(보이지 않는 텍스트), 모션 줄이기 설정에서는 애니메이션 없이 바로 보인다.
  *
  * Props:
  * @param {Array<Array<{text: string, isAccent?: boolean}>>} lines - 줄 목록. 각 줄은 단어 객체 배열 [Required]
  * @param {number} startDelay - 첫 글자가 나타나기 전 지연(초) [Optional, 기본값: 0.2]
  * @param {number} charDelay - 글자 사이 간격(초) [Optional, 기본값: 0.04]
+ * @param {boolean} hasLineBreaks - true면 줄마다 강제로 줄바꿈하고, false면 공간에 맞춰 자연스럽게 흐른다 [Optional, 기본값: true]
  *
  * Example usage:
- * <RevealText lines={[[{ text: '안녕' }, { text: '하세요', isAccent: true }]]} />
+ * <RevealText lines={[[{ text: '안녕' }, { text: '하세요', isAccent: true }]]} hasLineBreaks={!isMobile} />
  */
-function RevealText({ lines, startDelay = 0.2, charDelay = 0.04 }) {
+function RevealText({ lines, startDelay = 0.2, charDelay = 0.04, hasLineBreaks = true }) {
   const label = lines.map((line) => line.map((word) => word.text).join(' ')).join(' ');
   let charIndex = 0;
 
   return (
     <Box
       component="span"
-      aria-label={label}
       sx={{
+        position: 'relative',
         '@keyframes reveal-char': {
           from: { opacity: 0 },
           to: { opacity: 1 },
@@ -37,12 +38,26 @@ function RevealText({ lines, startDelay = 0.2, charDelay = 0.04 }) {
         },
       }}
     >
+      {/* 스크린 리더에는 전체 문장만 읽히도록 보이지 않는 텍스트를 두고, 글자별 애니메이션은 숨긴다. */}
+      <Box
+        component="span"
+        sx={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          overflow: 'hidden',
+          clip: 'rect(0 0 0 0)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </Box>
       {lines.map((line, lineIndex) => (
         <Box
           key={lineIndex}
           component="span"
           aria-hidden="true"
-          sx={{ display: { md: 'block' } }}
+          sx={{ display: hasLineBreaks ? 'block' : 'inline' }}
         >
           {line.map((word, wordIndex) => (
             <React.Fragment key={wordIndex}>

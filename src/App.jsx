@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Navbar from './components/common/navbar.jsx';
+import Footer from './components/common/footer.jsx';
 import Home from './pages/home.jsx';
 import AboutMe from './pages/about-me.jsx';
 import Projects from './pages/projects.jsx';
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/about" element={<AboutMe />} />
                 <Route path="/projects" element={<Projects />} />
               </Routes>
+              <Footer />
             </Box>
           </HashRouter>
         </PortfolioProvider>

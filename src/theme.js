@@ -6,11 +6,13 @@ const MODE_PALETTES = {
       default: '#121212',
       paper: '#1e1e1e',
     },
+    /* 작은 글씨 대비(WCAG AA 4.5:1)를 위해 disabled/accent.text는 밝게 조정한다. */
     text: {
       primary: '#ffffff',
       secondary: '#b3b3b3',
-      disabled: '#7a7a7a',
+      disabled: '#8f8f8f',
     },
+    accentText: '#ff5a4d',
     divider: 'rgba(255, 255, 255, 0.16)',
   },
   light: {
@@ -21,8 +23,9 @@ const MODE_PALETTES = {
     text: {
       primary: '#1a1a1a',
       secondary: '#54534f',
-      disabled: '#8a8985',
+      disabled: '#64635f',
     },
+    accentText: '#b91c13',
     divider: 'rgba(0, 0, 0, 0.14)',
   },
 };
@@ -34,7 +37,7 @@ const MODE_PALETTES = {
  * @param {'dark' | 'light'} mode - 팔레트 모드 [Required]
  */
 function createAppTheme(mode) {
-  const modePalette = MODE_PALETTES[mode] ?? MODE_PALETTES.dark;
+  const { accentText, ...modePalette } = MODE_PALETTES[mode] ?? MODE_PALETTES.dark;
 
   return createTheme({
     palette: {
@@ -49,9 +52,11 @@ function createAppTheme(mode) {
         main: '#1b2a4a',
         contrastText: '#ffffff',
       },
+      /* accent.main: 배경/테두리/아이콘용, accent.text: 작은 글씨용(대비 4.5:1 이상) */
       accent: {
         main: '#e1251b',
         hover: '#ff4b3e',
+        text: accentText,
       },
       ...modePalette,
     },

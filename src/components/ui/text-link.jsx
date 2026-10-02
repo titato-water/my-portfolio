@@ -7,6 +7,7 @@ import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
  * TextLink 컴포넌트
  *
  * 밑줄과 화살표 아이콘으로 구성된 에디토리얼 스타일의 텍스트 링크.
+ * 눈에 보이는 밑줄은 글자 바로 아래에 두고, 눌리는 영역은 높이 44px 이상으로 확보한다.
  *
  * Props:
  * @param {string} to - 이동할 라우트 경로 [Required]
@@ -23,30 +24,39 @@ function TextLink({ to, children }) {
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 1,
+        minHeight: 44,
         color: 'text.primary',
         textDecoration: 'none',
         fontWeight: 600,
         fontSize: '1rem',
-        pb: 0.5,
-        borderBottom: '1px solid',
-        borderColor: 'rgba(184, 196, 206, 0.35)',
-        transition: 'border-color 0.2s ease, color 0.2s ease',
+        transition: 'color 0.2s ease',
         '&:hover': {
-          color: 'accent.main',
-          borderColor: 'accent.main',
-        },
-        '&:hover .text-link-icon': {
-          transform: 'translateX(4px)',
+          color: 'accent.text',
+          '& .text-link-label': { borderColor: 'accent.main' },
+          '& .text-link-icon': { transform: 'translateX(4px)' },
         },
       }}
     >
-      {children}
-      <ArrowForwardRoundedIcon
-        className="text-link-icon"
-        fontSize="small"
-        sx={{ transition: 'transform 0.2s ease' }}
-      />
+      <Box
+        component="span"
+        className="text-link-label"
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 1,
+          pb: 0.5,
+          borderBottom: '1px solid',
+          borderColor: 'rgba(184, 196, 206, 0.35)',
+          transition: 'border-color 0.2s ease',
+        }}
+      >
+        {children}
+        <ArrowForwardRoundedIcon
+          className="text-link-icon"
+          fontSize="small"
+          sx={{ transition: 'transform 0.2s ease' }}
+        />
+      </Box>
     </Box>
   );
 }

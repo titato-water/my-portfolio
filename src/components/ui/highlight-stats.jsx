@@ -35,7 +35,7 @@ function HighlightStats({ items }) {
                 fontWeight: 800,
                 lineHeight: 1.1,
                 letterSpacing: '-0.02em',
-                color: 'accent.main',
+                color: 'accent.text',
               }}
             >
               {item.value}

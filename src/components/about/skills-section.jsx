@@ -28,7 +28,7 @@ function SkillsSection({ skills = skillsData }) {
   return (
     <Box component="section" aria-label="스킬">
       <Box sx={{ mb: { xs: 3, md: 5 } }}>
-        <Typography variant="overline" sx={{ color: 'accent.main', lineHeight: 1.6 }}>
+        <Typography variant="overline" sx={{ color: 'accent.text', lineHeight: 1.6 }}>
           Skills
         </Typography>
         <Typography

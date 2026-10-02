@@ -52,7 +52,7 @@ function ContentTabs({ sections }) {
             py: 2,
           },
           '& .MuiTabs-indicator': { backgroundColor: 'accent.main', height: 3 },
-          '& .Mui-selected': { color: 'accent.main' },
+          '& .Mui-selected': { color: 'accent.text' },
         }}
       >
         {sections.map((section, index) => (

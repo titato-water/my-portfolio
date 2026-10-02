@@ -43,8 +43,8 @@ function FeaturedProjectCard({
   return (
     <Box
       {...linkProps}
-      aria-label={href ? `${label}: ${title} (새 탭에서 열기)` : `${label}: ${title}`}
       sx={{
+        position: 'relative',
         display: 'block',
         color: 'inherit',
         textDecoration: 'none',
@@ -83,12 +83,12 @@ function FeaturedProjectCard({
         )}
       </Box>
       <Box sx={{ p: { xs: 2.5, md: 3 } }}>
-        <Typography variant="overline" sx={{ color: 'accent.main', lineHeight: 1.6 }}>
+        <Typography variant="overline" sx={{ color: 'accent.text', lineHeight: 1.6 }}>
           {label}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
           <Typography
-            component="h2"
+            component="p"
             sx={{
               fontSize: { xs: '1.25rem', md: '1.6rem' },
               fontWeight: 700,
@@ -101,7 +101,7 @@ function FeaturedProjectCard({
           <ArrowOutwardRoundedIcon
             className="featured-arrow"
             sx={{
-              color: 'accent.main',
+              color: 'accent.text',
               opacity: 0,
               transform: 'translate(-4px, 4px)',
               transition: 'opacity 0.2s ease, transform 0.2s ease',
@@ -131,6 +131,22 @@ function FeaturedProjectCard({
                 sx={{ backgroundColor: 'background.default', color: 'text.secondary' }}
               />
             ))}
+          </Box>
+        )}
+        {href && (
+          /* 새 탭으로 열린다는 안내를 스크린 리더에만 전달한다. (링크 이름이 보이는 글자를 포함하도록 aria-label 대신 사용) */
+          <Box
+            component="span"
+            sx={{
+              position: 'absolute',
+              width: 1,
+              height: 1,
+              overflow: 'hidden',
+              clip: 'rect(0 0 0 0)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            (새 탭에서 열기)
           </Box>
         )}
       </Box>
