@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import AnimatedList from '../ui/animated-list.jsx';
 import { supabase } from '../../lib/supabase.js';
 
 const PAGE_SIZE = 5;
@@ -45,7 +46,8 @@ function GuestbookList({ refreshKey = 0 }) {
     let isCancelled = false;
 
     async function loadFirstPage() {
-      setStatus('loading');
+      /* 이미 불러온 뒤의 새로고침(새 글 등록)에서는 목록을 지우지 않아 AnimatedList가 새 항목만 등장시킨다. */
+      setStatus((prev) => (prev === 'loaded' ? prev : 'loading'));
       const { data, error } = await fetchPage(0);
 
       if (isCancelled) return;
@@ -105,34 +107,36 @@ function GuestbookList({ refreshKey = 0 }) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {entries.map((entry) => (
-        <Box
-          key={entry.id}
-          sx={{
-            pb: 3,
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 0.5 }}>
-            {entry.emoji && <Box component="span">{entry.emoji}</Box>}
-            <Typography sx={{ fontWeight: 700, color: 'text.primary' }}>
-              {entry.name}
-            </Typography>
-            {(entry.region || entry.age_group) && (
-              <Typography sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {[entry.region, entry.age_group].filter(Boolean).join(' · ')}
+      <AnimatedList delay={90} gap={3}>
+        {entries.map((entry) => (
+          <Box
+            key={entry.id}
+            sx={{
+              pb: 3,
+              borderBottom: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 0.5 }}>
+              {entry.emoji && <Box component="span">{entry.emoji}</Box>}
+              <Typography sx={{ fontWeight: 700, color: 'text.primary' }}>
+                {entry.name}
               </Typography>
-            )}
-            <Typography sx={{ fontSize: '0.8rem', color: 'text.disabled', ml: 'auto' }}>
-              {formatDate(entry.created_at)}
+              {(entry.region || entry.age_group) && (
+                <Typography sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
+                  {[entry.region, entry.age_group].filter(Boolean).join(' · ')}
+                </Typography>
+              )}
+              <Typography sx={{ fontSize: '0.8rem', color: 'text.disabled', ml: 'auto' }}>
+                {formatDate(entry.created_at)}
+              </Typography>
+            </Box>
+            <Typography sx={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'text.secondary' }}>
+              {entry.message}
             </Typography>
           </Box>
-          <Typography sx={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'text.secondary' }}>
-            {entry.message}
-          </Typography>
-        </Box>
-      ))}
+        ))}
+      </AnimatedList>
       {hasMore && (
         <Box
           component="button"
@@ -141,6 +145,7 @@ function GuestbookList({ refreshKey = 0 }) {
           disabled={loadingMore}
           sx={{
             alignSelf: 'flex-start',
+            minHeight: 44,
             backgroundColor: 'transparent',
             border: '1px solid',
             borderColor: 'divider',
@@ -155,7 +160,7 @@ function GuestbookList({ refreshKey = 0 }) {
             transition: 'border-color 0.2s ease, color 0.2s ease',
             '&:hover': {
               borderColor: 'accent.main',
-              color: 'accent.main',
+              color: 'accent.text',
             },
           }}
         >
