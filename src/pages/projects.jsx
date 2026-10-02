@@ -1,15 +1,20 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import ProjectCard from '../components/ui/project-card.jsx';
 import SectionNumber from '../components/ui/section-number.jsx';
+import useProjects from '../hooks/use-projects.js';
 
 /**
  * Projects 페이지
  *
- * 포트폴리오 작품들이 들어갈 플레이스홀더 페이지.
+ * Supabase projects 테이블의 게시된 프로젝트를 가로형 카드 리스트로 보여준다.
  */
 function Projects() {
+  const { projects, status } = useProjects();
+
   return (
     <Box
       component="main"
@@ -19,7 +24,7 @@ function Projects() {
         width: '100%',
         flexGrow: 1,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: 'background.default',
         px: { xs: 2, md: 6 },
         py: { xs: 10, md: 16 },
@@ -43,17 +48,37 @@ function Projects() {
         >
           Projects
         </Typography>
-        <Typography
-          sx={{
-            fontSize: { xs: '1rem', md: '1.25rem' },
-            lineHeight: 1.7,
-            color: 'text.secondary',
-            maxWidth: 560,
-          }}
-        >
-          Projects 페이지가 개발될 공간입니다. 포트폴리오 작품들이 들어갈
-          예정입니다.
-        </Typography>
+        {status === 'loading' && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+            <CircularProgress color="primary" />
+          </Box>
+        )}
+        {status === 'error' && (
+          <Typography sx={{ color: 'text.secondary' }}>
+            프로젝트를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+          </Typography>
+        )}
+        {status === 'loaded' && projects.length === 0 && (
+          <Typography sx={{ color: 'text.secondary' }}>
+            아직 등록된 프로젝트가 없습니다.
+          </Typography>
+        )}
+        {status === 'loaded' && projects.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                title={project.title}
+                description={project.description}
+                techStack={project.tech_stack}
+                detailUrl={project.detail_url}
+                githubUrl={project.github_url}
+                thumbnailUrl={project.thumbnail_url}
+                isPersonal={project.is_personal}
+              />
+            ))}
+          </Box>
+        )}
       </Container>
     </Box>
   );

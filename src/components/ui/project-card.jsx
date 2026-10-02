@@ -1,0 +1,174 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
+import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
+
+/**
+ * ProjectCard 컴포넌트
+ *
+ * 왼쪽 16:9 썸네일, 오른쪽 프로젝트 정보로 구성된 가로형 카드.
+ * 배포/GitHub 주소가 없으면 해당 버튼은 표시하지 않는다.
+ *
+ * Props:
+ * @param {string} title - 프로젝트 제목 [Required]
+ * @param {string} description - 한 줄 설명 [Optional, 기본값: '']
+ * @param {string[]} techStack - 기술 스택 목록 [Optional, 기본값: []]
+ * @param {string} detailUrl - 배포된 사이트 주소 [Optional]
+ * @param {string} githubUrl - GitHub 저장소 주소 [Optional]
+ * @param {string} thumbnailUrl - 썸네일 이미지 주소 [Optional]
+ * @param {boolean} isPersonal - 개인 프로젝트 여부 [Optional, 기본값: true]
+ *
+ * Example usage:
+ * <ProjectCard title="Devision" techStack={['React']} detailUrl="https://example.com" />
+ */
+function ProjectCard({
+  title,
+  description = '',
+  techStack = [],
+  detailUrl,
+  githubUrl,
+  thumbnailUrl,
+  isPersonal = true,
+}) {
+  const [isImageFailed, setIsImageFailed] = React.useState(false);
+  const hasThumbnail = Boolean(thumbnailUrl) && !isImageFailed;
+
+  return (
+    <Box
+      component="article"
+      sx={{
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 1,
+        backgroundColor: 'background.paper',
+        overflow: 'hidden',
+        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        '&:hover': {
+          transform: 'scale(1.01)',
+          boxShadow: 8,
+        },
+      }}
+    >
+      <Grid container>
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              aspectRatio: '16 / 9',
+              backgroundColor: 'background.default',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'text.disabled',
+            }}
+          >
+            {hasThumbnail ? (
+              <Box
+                component="img"
+                src={thumbnailUrl}
+                alt={`${title} 스크린샷`}
+                loading="lazy"
+                onError={() => setIsImageFailed(true)}
+                sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            ) : (
+              <ImageNotSupportedOutlinedIcon sx={{ fontSize: 48 }} />
+            )}
+          </Box>
+        </Grid>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Box
+            sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: 2,
+              p: { xs: 2.5, md: 4 },
+            }}
+          >
+            <Box>
+              <Typography
+                variant="overline"
+                sx={{ color: 'accent.main', lineHeight: 1.6 }}
+              >
+                {isPersonal ? 'Personal' : 'Team'}
+              </Typography>
+              <Typography
+                component="h2"
+                sx={{
+                  fontSize: { xs: '1.5rem', md: '2rem' },
+                  fontWeight: 700,
+                  lineHeight: 1.3,
+                  color: 'text.primary',
+                }}
+              >
+                {title}
+              </Typography>
+            </Box>
+            {description && (
+              <Typography
+                sx={{
+                  fontSize: { xs: '1rem', md: '1.1rem' },
+                  lineHeight: 1.6,
+                  color: 'text.secondary',
+                }}
+              >
+                {description}
+              </Typography>
+            )}
+            {techStack.length > 0 && (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {techStack.map((tech) => (
+                  <Chip key={tech} label={tech} size="small" variant="outlined" />
+                ))}
+              </Box>
+            )}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 1 }}>
+              {detailUrl && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  href={detailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  endIcon={<OpenInNewRoundedIcon />}
+                  sx={{
+                    transition: 'transform 0.15s ease',
+                    '&:active': { transform: 'scale(0.96)' },
+                  }}
+                >
+                  Live Demo
+                </Button>
+              )}
+              {githubUrl && (
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  startIcon={<GitHubIcon />}
+                  sx={{
+                    transition: 'transform 0.15s ease',
+                    '&:active': { transform: 'scale(0.96)' },
+                  }}
+                >
+                  GitHub
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+export default ProjectCard;
