@@ -13,7 +13,7 @@ const FEATURED_COUNT = 4;
 /**
  * Projects 섹션
  *
- * Supabase에서 불러온 대표작(앞쪽 4개) 리스트와 Projects 페이지로 이동하는 '더 보기' 링크를 제공한다.
+ * Supabase에서 불러온 대표작(앞쪽 4개) 리스트(작은 썸네일 포함)와 Projects 페이지로 이동하는 '더 보기' 링크를 제공한다.
  */
 function ProjectsSection() {
   const { projects, status } = useProjects();
@@ -24,15 +24,13 @@ function ProjectsSection() {
       component="section"
       sx={{
         width: '100%',
-        backgroundColor: 'background.default',
-        borderTop: '1px solid',
-        borderColor: 'divider',
+        backgroundColor: 'background.paper',
         px: { xs: 2, md: 6 },
         py: { xs: 8, md: 12 },
       }}
     >
       <Container maxWidth="xl" disableGutters>
-        <SectionHeading label="Projects" index="04" total="05" />
+        <SectionHeading label="Projects" />
         <Typography
           sx={{
             fontSize: { xs: '1.75rem', md: '2.5rem' },
@@ -73,8 +71,7 @@ function ProjectsSection() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 py: { xs: 2.5, md: 3.5 },
-                borderTop: i === 0 ? '1px solid' : 'none',
-                borderBottom: '1px solid',
+                borderBottom: i === featuredProjects.length - 1 ? 'none' : '1px solid',
                 borderColor: 'divider',
                 transition: 'padding-left 0.2s ease',
                 '&:hover': {
@@ -83,10 +80,11 @@ function ProjectsSection() {
                     opacity: 1,
                     transform: 'translate(0, 0)',
                   },
+                  '& .project-thumb img': { transform: 'scale(1.08)' },
                 },
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: { xs: 2, md: 4 } }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, md: 4 } }}>
                 <Typography
                   sx={{
                     fontSize: { xs: '0.9rem', md: '1rem' },
@@ -96,6 +94,37 @@ function ProjectsSection() {
                 >
                   {String(i + 1).padStart(2, '0')}
                 </Typography>
+                <Box
+                  className="project-thumb"
+                  aria-hidden="true"
+                  sx={{
+                    flexShrink: 0,
+                    width: { xs: 72, md: 128 },
+                    aspectRatio: '16 / 9',
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    backgroundColor: 'background.default',
+                  }}
+                >
+                  {project.thumbnail_url && (
+                    <Box
+                      component="img"
+                      src={project.thumbnail_url}
+                      alt=""
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = 'none';
+                      }}
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                        transition: 'transform 0.3s ease',
+                      }}
+                    />
+                  )}
+                </Box>
                 <Typography
                   sx={{
                     fontSize: { xs: '1.25rem', md: '1.75rem' },

@@ -39,17 +39,16 @@ function ContactSection() {
   return (
     <Box
       component="section"
+      id="contact"
       sx={{
         width: '100%',
         backgroundColor: 'background.default',
-        borderTop: '1px solid',
-        borderColor: 'divider',
         px: { xs: 2, md: 6 },
         py: { xs: 8, md: 12 },
       }}
     >
       <Container maxWidth="xl" disableGutters>
-        <SectionHeading label="Contact" index="05" total="05" />
+        <SectionHeading label="Contact" />
         <Typography
           sx={{
             fontSize: { xs: '1.75rem', md: '2.5rem' },

@@ -4,7 +4,6 @@ import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import ProjectCard from '../components/ui/project-card.jsx';
-import SectionNumber from '../components/ui/section-number.jsx';
 import useProjects from '../hooks/use-projects.js';
 
 /**
@@ -30,7 +29,6 @@ function Projects() {
         py: { xs: 10, md: 16 },
       }}
     >
-      <SectionNumber value="03" />
       <Container maxWidth="xl" disableGutters sx={{ position: 'relative', zIndex: 1 }}>
         <Typography variant="overline" sx={{ color: 'accent.main' }}>
           Projects

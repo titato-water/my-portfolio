@@ -9,6 +9,7 @@ import AboutMe from './pages/about-me.jsx';
 import Projects from './pages/projects.jsx';
 import createAppTheme from './theme.js';
 import { ColorModeContext, useColorModeState } from './hooks/use-color-mode.js';
+import PortfolioProvider from './contexts/portfolio-provider.jsx';
 
 function App() {
   const { mode, toggleColorMode } = useColorModeState();
@@ -18,24 +19,26 @@ function App() {
     <ColorModeContext.Provider value={{ mode, toggleColorMode }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <HashRouter>
-          <Box
-            sx={{
-              width: '100%',
-              minHeight: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              backgroundColor: 'background.default',
-            }}
-          >
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutMe />} />
-              <Route path="/projects" element={<Projects />} />
-            </Routes>
-          </Box>
-        </HashRouter>
+        <PortfolioProvider>
+          <HashRouter>
+            <Box
+              sx={{
+                width: '100%',
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'background.default',
+              }}
+            >
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<AboutMe />} />
+                <Route path="/projects" element={<Projects />} />
+              </Routes>
+            </Box>
+          </HashRouter>
+        </PortfolioProvider>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
