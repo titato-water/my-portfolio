@@ -97,6 +97,7 @@ function Navbar() {
               onClick={toggleColorMode}
               aria-label="라이트/다크 모드 전환"
               sx={{
+                alignSelf: 'center',
                 color: 'text.disabled',
                 '&:hover': { color: 'accent.main' },
               }}
