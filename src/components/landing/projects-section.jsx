@@ -3,17 +3,22 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
+import { Link as RouterLink } from 'react-router-dom';
 import SectionHeading from '../ui/section-heading.jsx';
 import TextLink from '../ui/text-link.jsx';
+import useProjects from '../../hooks/use-projects.js';
 
-const PLACEHOLDER_PROJECTS = ['Project 1', 'Project 2', 'Project 3', 'Project 4'];
+const FEATURED_COUNT = 4;
 
 /**
  * Projects 섹션
  *
- * 대표작 리스트와 Projects 페이지로 이동하는 '더 보기' 링크를 제공하는 플레이스홀더 섹션.
+ * Supabase에서 불러온 대표작(앞쪽 4개) 리스트와 Projects 페이지로 이동하는 '더 보기' 링크를 제공한다.
  */
 function ProjectsSection() {
+  const { projects, status } = useProjects();
+  const featuredProjects = projects.slice(0, FEATURED_COUNT);
+
   return (
     <Box
       component="section"
@@ -48,14 +53,22 @@ function ProjectsSection() {
             mb: 5,
           }}
         >
-          여기는 Projects 섹션입니다. 대표작 썸네일 3-4개와 '더 보기' 버튼이
-          들어갈 예정입니다.
+          직접 만들고 배포한 프로젝트들입니다.
         </Typography>
+        {status === 'error' && (
+          <Typography sx={{ color: 'text.secondary', mb: 5 }}>
+            프로젝트를 불러오지 못했습니다.
+          </Typography>
+        )}
         <Box sx={{ mb: 5 }}>
-          {PLACEHOLDER_PROJECTS.map((name, i) => (
+          {featuredProjects.map((project, i) => (
             <Box
-              key={name}
+              key={project.id}
+              component={RouterLink}
+              to="/projects"
               sx={{
+                color: 'inherit',
+                textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -81,7 +94,7 @@ function ProjectsSection() {
                     fontWeight: 600,
                   }}
                 >
-                  0{i + 1}
+                  {String(i + 1).padStart(2, '0')}
                 </Typography>
                 <Typography
                   sx={{
@@ -90,7 +103,7 @@ function ProjectsSection() {
                     color: 'text.primary',
                   }}
                 >
-                  {name}
+                  {project.title}
                 </Typography>
               </Box>
               <ArrowOutwardRoundedIcon
