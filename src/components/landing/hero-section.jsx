@@ -82,8 +82,10 @@ function HeroSection() {
       component="section"
       sx={(theme) => {
         const isDark = theme.palette.mode === 'dark';
-        const dotColor = isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.1)';
-        const glowColor = isDark ? 'rgba(225, 37, 27, 0.3)' : 'rgba(225, 37, 27, 0.18)';
+        /* 밝은 배경에서는 같은 빨강이 훨씬 옅게 보여서 라이트 모드의 농도를 높인다. */
+        const dotColor = isDark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.22)';
+        const glowColor = isDark ? 'rgba(225, 37, 27, 0.3)' : 'rgba(225, 37, 27, 0.45)';
+        const cornerGlow = isDark ? 'rgba(225, 37, 27, 0.1)' : 'rgba(225, 37, 27, 0.2)';
 
         return {
           position: 'relative',
@@ -93,6 +95,8 @@ function HeroSection() {
           display: 'flex',
           alignItems: 'center',
           backgroundColor: 'background.default',
+          /* 왼쪽 아래 모서리의 은은한 광원 (오른쪽 위 광원과 대각선으로 균형을 맞춘다) */
+          backgroundImage: `radial-gradient(ellipse 55% 65% at 0% 100%, ${cornerGlow}, transparent 70%)`,
           px: { xs: 2, md: 6 },
           pt: { xs: 10, md: 12 },
           pb: { xs: 12, md: 16 },
@@ -132,10 +136,10 @@ function HeroSection() {
           '&::after': {
             content: '""',
             position: 'absolute',
-            top: { xs: -120, md: -200 },
-            right: { xs: -200, md: -160 },
-            width: { xs: 420, md: 720 },
-            height: { xs: 420, md: 720 },
+            top: { xs: -100, md: -160 },
+            right: { xs: -160, md: -100 },
+            width: { xs: 420, md: 780 },
+            height: { xs: 420, md: 780 },
             borderRadius: '50%',
             pointerEvents: 'none',
             background: `radial-gradient(circle, ${glowColor}, transparent 65%)`,
