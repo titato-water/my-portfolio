@@ -7,6 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import SectionHeading from '../ui/section-heading.jsx';
 import TextLink from '../ui/text-link.jsx';
 import useProjects from '../../hooks/use-projects.js';
+import { SECTION_SCROLL_MARGIN } from '../../utils/scroll-to-section.js';
 
 const FEATURED_COUNT = 4;
 
@@ -22,7 +23,9 @@ function ProjectsSection() {
   return (
     <Box
       component="section"
+      id="projects"
       sx={{
+        scrollMarginTop: SECTION_SCROLL_MARGIN,
         width: '100%',
         backgroundColor: 'background.paper',
         px: { xs: 2, md: 6 },

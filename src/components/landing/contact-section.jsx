@@ -40,10 +40,7 @@ function ContactSection() {
   return (
     <Box
       component="section"
-      id="contact"
       sx={{
-        /* 스크롤로 이동할 때 고정 헤더(모바일 61px, 그 이상 약 70px)에 제목이 가려지지 않게 한다. */
-        scrollMarginTop: { xs: '61px', sm: '70px' },
         width: '100%',
         backgroundColor: 'background.default',
         px: { xs: 2, md: 6 },

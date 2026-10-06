@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Navbar from './components/common/navbar.jsx';
 import Footer from './components/common/footer.jsx';
+import ScrollToTop from './components/common/scroll-to-top.jsx';
 import Home from './pages/home.jsx';
 import NotFound from './pages/not-found.jsx';
 import createAppTheme from './theme.js';
@@ -37,6 +38,7 @@ function App() {
                 backgroundColor: 'background.default',
               }}
             >
+              <ScrollToTop />
               <Navbar />
               <React.Suspense fallback={PAGE_FALLBACK}>
                 <Routes>

@@ -8,6 +8,7 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import SectionHeading from '../ui/section-heading.jsx';
 import TextLink from '../ui/text-link.jsx';
 import usePortfolio from '../../hooks/use-portfolio.js';
+import { SECTION_SCROLL_MARGIN } from '../../utils/scroll-to-section.js';
 
 /**
  * About Me 섹션
@@ -30,7 +31,9 @@ function AboutSection() {
   return (
     <Box
       component="section"
+      id="about"
       sx={{
+        scrollMarginTop: SECTION_SCROLL_MARGIN,
         width: '100%',
         backgroundColor: 'background.paper',
         px: { xs: 2, md: 6 },

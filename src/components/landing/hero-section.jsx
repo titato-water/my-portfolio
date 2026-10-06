@@ -118,6 +118,7 @@ function HeroSection() {
     <Box
       ref={heroRef}
       component="section"
+      id="hero"
       sx={(theme) => {
         const isDark = theme.palette.mode === 'dark';
         /* 밝은 배경에서는 같은 빨강이 훨씬 옅게 보여서 라이트 모드의 농도를 높인다. */

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import SectionHeading from '../ui/section-heading.jsx';
 import TextLink from '../ui/text-link.jsx';
 import usePortfolio from '../../hooks/use-portfolio.js';
+import { SECTION_SCROLL_MARGIN } from '../../utils/scroll-to-section.js';
 import { SKILL_ICONS } from '../../utils/skills-data.js';
 
 /**
@@ -19,7 +20,9 @@ function SkillTreeSection() {
   return (
     <Box
       component="section"
+      id="skills"
       sx={{
+        scrollMarginTop: SECTION_SCROLL_MARGIN,
         width: '100%',
         backgroundColor: 'background.default',
         px: { xs: 2, md: 6 },
