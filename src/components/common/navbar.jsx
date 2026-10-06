@@ -68,6 +68,7 @@ const navItemSx = {
  * - 메뉴 이동: 홈에서는 해당 섹션으로 부드럽게 스크롤하고, 다른 페이지에서는 페이지로 이동한다.
  *   (Contact는 별도 페이지가 없어 홈으로 이동한 뒤 스크롤한다.)
  * - 모바일(767px 이하): 햄버거 버튼과 오른쪽 사이드 메뉴
+ * - 로고: 홈으로 가는 링크. 홈에서는 맨 위로 스크롤하고, 다른 페이지에서는 홈으로 이동한다.
  */
 function Navbar() {
   const { mode, toggleColorMode } = useColorMode();
@@ -97,6 +98,21 @@ function Navbar() {
         setTimeout(() => scrollToSection(item.sectionId), MENU_CLOSE_DELAY_MS);
       } else {
         scrollToSection(item.sectionId);
+      }
+    }
+  };
+
+  /* 로고: 홈에서는 맨 위로 스크롤하고, 다른 페이지에서는 홈으로 이동한다. (홈 메뉴와 같은 동작) */
+  const handleLogoClick = (event) => {
+    const wasMenuOpen = isMenuOpen;
+    setMenuOpenPath(null);
+
+    if (isHome) {
+      event.preventDefault();
+      if (wasMenuOpen) {
+        setTimeout(() => scrollToSection('hero'), MENU_CLOSE_DELAY_MS);
+      } else {
+        scrollToSection('hero');
       }
     }
   };
@@ -151,7 +167,22 @@ function Navbar() {
               justifyContent: 'space-between',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, pl: { xs: 0.5, md: 0 } }}>
+            <Box
+              component={RouterLink}
+              to="/"
+              onClick={handleLogoClick}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.25,
+                minHeight: TOUCH_TARGET,
+                pl: { xs: 0.5, md: 0 },
+                color: 'text.primary',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+                '&:hover': { color: 'accent.text' },
+              }}
+            >
               <Box
                 aria-hidden="true"
                 sx={{
@@ -168,7 +199,7 @@ function Navbar() {
                   fontWeight: 800,
                   letterSpacing: '0.06em',
                   textTransform: 'uppercase',
-                  color: 'text.primary',
+                  color: 'inherit',
                 }}
               >
                 My Portfolio
