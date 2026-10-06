@@ -2,7 +2,7 @@ import * as React from 'react';
 import { supabase } from '../lib/supabase.js';
 
 const SELECT_COLUMNS =
-  'id, title, description, tech_stack, detail_url, github_url, thumbnail_url, is_personal, role, period, highlights';
+  'id, title, description, tech_stack, detail_url, github_url, thumbnail_url, is_personal, role, period, highlights, tech_groups, skills_used';
 
 /**
  * 게시된(is_published) 프로젝트를 sort_order 순으로 불러오는 훅

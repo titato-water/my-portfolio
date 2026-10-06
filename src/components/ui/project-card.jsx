@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
@@ -25,9 +26,10 @@ import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupported
  * @param {string} role - 내 역할 (팀 프로젝트라면 담당 업무) [Optional, 기본값: '']
  * @param {string} period - 진행 기간 [Optional, 기본값: '']
  * @param {string[]} highlights - 주요 구현 내용(2~3개) [Optional, 기본값: []]
+ * @param {function} onOpenDetail - 카드(또는 '상세 보기' 버튼)를 눌렀을 때 호출. 카드 안의 링크/버튼을 누를 때는 호출되지 않는다 [Optional]
  *
  * Example usage:
- * <ProjectCard title="Devision" role="개인 프로젝트" highlights={['댓글 기능 구현']} detailUrl="https://example.com" />
+ * <ProjectCard title="Devision" role="개인 프로젝트" highlights={['댓글 기능 구현']} onOpenDetail={open} />
  */
 function ProjectCard({
   title,
@@ -40,14 +42,23 @@ function ProjectCard({
   role = '',
   period = '',
   highlights = [],
+  onOpenDetail,
 }) {
   const [isImageFailed, setIsImageFailed] = React.useState(false);
   const hasThumbnail = Boolean(thumbnailUrl) && !isImageFailed;
 
+  /* 카드 어디를 눌러도 상세가 열리지만, 안에 있는 링크/버튼(Live Demo, GitHub, 상세 보기)은 각자 동작한다. */
+  const handleCardClick = (event) => {
+    if (!onOpenDetail || event.target.closest('a, button')) return;
+    onOpenDetail();
+  };
+
   return (
     <Box
       component="article"
+      onClick={handleCardClick}
       sx={{
+        cursor: onOpenDetail ? 'pointer' : 'default',
         border: '1px solid',
         borderColor: 'divider',
         borderRadius: 1,
@@ -172,6 +183,21 @@ function ProjectCard({
               </Box>
             )}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, mt: 1 }}>
+              {onOpenDetail && (
+                <Button
+                  variant="text"
+                  color="inherit"
+                  onClick={onOpenDetail}
+                  endIcon={<ArrowForwardRoundedIcon />}
+                  aria-label={`${title} 사용 기술과 스킬 상세 보기`}
+                  sx={{
+                    color: 'text.primary',
+                    '&:hover': { color: 'accent.text', backgroundColor: 'action.hover' },
+                  }}
+                >
+                  상세 보기
+                </Button>
+              )}
               {detailUrl && (
                 <Button
                   variant="contained"

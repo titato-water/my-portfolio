@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
-import { Link as RouterLink } from 'react-router-dom';
+import ProjectDetailDialog from '../ui/project-detail-dialog.jsx';
 import SectionHeading from '../ui/section-heading.jsx';
 import TextLink from '../ui/text-link.jsx';
 import useProjects from '../../hooks/use-projects.js';
@@ -15,9 +15,11 @@ const FEATURED_COUNT = 4;
  * Projects 섹션
  *
  * Supabase에서 불러온 대표작(앞쪽 4개) 리스트(작은 썸네일 포함)와 Projects 페이지로 이동하는 '더 보기' 링크를 제공한다.
+ * 목록의 프로젝트를 누르면 사용된 기술 스택과 내가 활용한 스킬을 보여주는 상세 창이 열린다.
  */
 function ProjectsSection() {
   const { projects, status } = useProjects();
+  const [selectedProject, setSelectedProject] = React.useState(null);
   const featuredProjects = projects.slice(0, FEATURED_COUNT);
 
   return (
@@ -65,11 +67,19 @@ function ProjectsSection() {
           {featuredProjects.map((project, i) => (
             <Box
               key={project.id}
-              component={RouterLink}
-              to="/projects"
+              component="button"
+              type="button"
+              onClick={() => setSelectedProject(project)}
               sx={{
+                position: 'relative',
+                width: '100%',
                 color: 'inherit',
-                textDecoration: 'none',
+                font: 'inherit',
+                textAlign: 'left',
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                px: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -137,6 +147,21 @@ function ProjectsSection() {
                 >
                   {project.title}
                 </Typography>
+                {/* 스크린 리더에는 버튼의 용도를 함께 읽어 준다. (aria-label 대신 내용으로 이름을 만들어 보이는 글자와 어긋나지 않게 한다) */}
+                <Box
+                  component="span"
+                  sx={{
+                    position: 'absolute',
+                    width: 1,
+                    height: 1,
+                    overflow: 'hidden',
+                    clip: 'rect(0 0 0 0)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {' '}
+                  사용 기술과 스킬 상세 보기
+                </Box>
               </Box>
               <ArrowOutwardRoundedIcon
                 className="project-arrow"
@@ -152,6 +177,7 @@ function ProjectsSection() {
         </Box>
         <TextLink to="/projects">더 보기</TextLink>
       </Container>
+      <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
     </Box>
   );
 }

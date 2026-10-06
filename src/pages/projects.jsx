@@ -4,15 +4,18 @@ import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import ProjectCard from '../components/ui/project-card.jsx';
+import ProjectDetailDialog from '../components/ui/project-detail-dialog.jsx';
 import useProjects from '../hooks/use-projects.js';
 
 /**
  * Projects 페이지
  *
  * Supabase projects 테이블의 게시된 프로젝트를 가로형 카드 리스트로 보여준다.
+ * 카드를 누르면 사용된 기술 스택과 내가 활용한 스킬을 보여주는 상세 창이 열린다.
  */
 function Projects() {
   const { projects, status } = useProjects();
+  const [selectedProject, setSelectedProject] = React.useState(null);
 
   return (
     <Box
@@ -76,11 +79,13 @@ function Projects() {
                 role={project.role ?? ''}
                 period={project.period ?? ''}
                 highlights={project.highlights ?? []}
+                onOpenDetail={() => setSelectedProject(project)}
               />
             ))}
           </Box>
         )}
       </Container>
+      <ProjectDetailDialog project={selectedProject} onClose={() => setSelectedProject(null)} />
     </Box>
   );
 }
