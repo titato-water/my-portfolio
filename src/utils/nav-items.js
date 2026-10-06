@@ -3,12 +3,13 @@
  *
  * - path: 홈이 아닌 곳에서 눌렀을 때 이동할 페이지
  * - sectionId: 홈에서 눌렀을 때 부드럽게 스크롤할 섹션 id
+ * - isPage: 별도 페이지가 있는 항목. 모바일 사이드 메뉴에서는 홈에서도 섹션 스크롤 대신 이 페이지로 이동한다.
  * - scrollState: 홈으로 이동한 뒤 스크롤할 섹션을 알려주는 라우터 state (Contact처럼 별도 페이지가 없는 항목)
  */
 export const NAV_ITEMS = [
   { key: 'home', label: 'Home', path: '/', sectionId: 'hero' },
-  { key: 'about', label: 'About Me', path: '/about', sectionId: 'about' },
-  { key: 'projects', label: 'Projects', path: '/projects', sectionId: 'projects' },
+  { key: 'about', label: 'About Me', path: '/about', sectionId: 'about', isPage: true },
+  { key: 'projects', label: 'Projects', path: '/projects', sectionId: 'projects', isPage: true },
   {
     key: 'contact',
     label: 'Contact',

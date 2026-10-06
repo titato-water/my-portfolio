@@ -62,12 +62,14 @@ const navItemSx = {
  * Navbar 컴포넌트
  *
  * 스크롤에 반응하는 상단 네비게이션.
- * - 스크롤 헤더: 아래로 스크롤하면 숨기고 위로 스크롤하면 다시 보여준다. (transform 사용, 맨 위/메뉴 열림/키보드 포커스 시에는 항상 표시)
+ * - 스크롤 헤더: **모바일에서만** 아래로 스크롤하면 숨기고 위로 스크롤하면 다시 보여준다.
+ *   (transform 사용, 맨 위/메뉴 열림/키보드 포커스 시에는 항상 표시) 데스크톱에서는 항상 보인다.
  * - 읽기 진행률: 화면 맨 위 고정 바 (ReadingProgressBar)
  * - 스크롤 스파이: 홈에서는 IntersectionObserver로 현재 보고 있는 섹션의 메뉴가 활성화된다.
- * - 메뉴 이동: 홈에서는 해당 섹션으로 부드럽게 스크롤하고, 다른 페이지에서는 페이지로 이동한다.
+ * - 데스크톱 메뉴 이동: 홈에서는 해당 섹션으로 부드럽게 스크롤하고, 다른 페이지에서는 페이지로 이동한다.
  *   (Contact는 별도 페이지가 없어 홈으로 이동한 뒤 스크롤한다.)
- * - 모바일(767px 이하): 햄버거 버튼과 오른쪽 사이드 메뉴
+ * - 모바일(767px 이하): 햄버거 버튼과 오른쪽 사이드 메뉴.
+ *   사이드 메뉴에서는 About Me/Projects가 홈에서도 섹션 스크롤 대신 해당 페이지로 이동한다.
  * - 로고: 홈으로 가는 링크. 홈에서는 맨 위로 스크롤하고, 다른 페이지에서는 홈으로 이동한다.
  */
 function Navbar() {
@@ -80,7 +82,8 @@ function Navbar() {
   const [menuOpenPath, setMenuOpenPath] = React.useState(null);
   const isMenuOpen = isMobile && menuOpenPath === pathname;
 
-  const { isHidden, progressBarRef, revealHeader } = useScrollNavigation(isMenuOpen);
+  /* 헤더는 모바일에서만 스크롤에 따라 숨긴다. 데스크톱(태블릿 포함)에서는 항상 보인다. */
+  const { isHidden, progressBarRef, revealHeader } = useScrollNavigation(isMenuOpen || !isMobile);
   const activeSectionId = useActiveSection(SPY_SECTION_IDS, isHome);
 
   const activeKey = isHome
@@ -91,7 +94,10 @@ function Navbar() {
     const wasMenuOpen = isMenuOpen;
     setMenuOpenPath(null);
 
-    if (isHome && item.sectionId) {
+    /* 모바일 사이드 메뉴에서는 별도 페이지가 있는 항목(About Me, Projects)을 섹션 스크롤이 아니라 페이지 이동으로 처리한다. */
+    const opensPage = isMobile && item.isPage;
+
+    if (isHome && item.sectionId && !opensPage) {
       event.preventDefault();
       if (wasMenuOpen) {
         /* 사이드 메뉴가 닫히며 스크롤 잠금이 풀릴 때 부드러운 스크롤이 끊기지 않도록, 메뉴가 닫힌 뒤에 이동한다. */
